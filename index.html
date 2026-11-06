@@ -495,6 +495,22 @@ body{font-size:16.5px;line-height:1.65;background:var(--bg)}
 .lleg{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;margin-top:16px;font-size:12.5px;color:var(--muted)}
 .lleg .lw{display:inline-block;width:14px;height:10px;border-radius:3px;background:rgba(201,168,106,.35);margin-right:6px;vertical-align:-1px}
 @media(max-width:560px){.lax{top:52px}}
+
+/* твоя семья и главы-карточки */
+.myf{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;padding:4px 2px 6px;margin:0 -20px;padding-left:20px;padding-right:20px}
+.myf::-webkit-scrollbar{display:none}
+.myf button{flex:none;width:78px;border:0;background:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.myf .av{--s:64px}
+.myf b{font:500 14px/1.15 var(--sans)}.myf small{font-size:12px;color:var(--muted);line-height:1.2;margin-top:-3px}
+.chg{font:400 13px var(--sans);color:var(--muted);margin:18px 0 8px}
+.chc{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:700px){.chc{grid-template-columns:1fr 1fr}}
+.chc button{border:0;background:var(--card);border-radius:var(--r);padding:0;text-align:left;overflow:hidden;display:grid;grid-template-columns:116px 1fr;align-items:center;gap:0 16px;min-height:96px}
+.chc .ci{grid-row:span 2;align-self:stretch;overflow:hidden;background:var(--dk)}.chc img{width:100%;height:100%;object-fit:cover}
+.chc b{display:block;font:500 20px/1.15 var(--serif);margin:0;align-self:end;padding-right:12px}.chc small{display:block;margin:0;color:var(--muted);font-size:12.5px;align-self:start;margin-top:4px}
+.chc button:hover b{text-decoration:underline}
+.chlh{font:400 12px var(--sans);color:rgba(255,255,255,.45);padding:12px 12px 4px}
+@media(min-width:900px){.myf{margin:0;padding-left:0}}
 /* хронология в карточке */
 .ptl{list-style:none;padding:0;margin:0;position:relative}
 .ptl::before{content:"";position:absolute;left:84px;top:10px;bottom:10px;width:1px;background:var(--line)}
@@ -850,10 +866,29 @@ const CH=[
 ];
 const HOME={};CH.forEach(c=>c.ppl.forEach(id=>{if(!HOME[id])HOME[id]=c.id}));
 const CHI=Object.fromEntries(CH.map(c=>[c.id,c]));
-const PAGES=[{k:'intro',s:'intro',t:'Предисловие'},{k:'tree',s:'tree',t:'Пять поколений'},{k:'map',s:'map',t:'Откуда мы'}];
-CH.forEach((c,i)=>PAGES.push({k:'ch',s:'ch-'+c.id,t:c.t,ch:c,n:i+1}));
-PAGES.push({k:'time',s:'time',t:'Лента времени'},{k:'arch',s:'arch',t:'Фотоархив'},{k:'kino',s:'kino',t:'Видеоархив'},{k:'add',s:'add',t:'Добавить историю'});
-const IDX=Object.fromEntries(PAGES.map((p,i)=>[p.s,i]));
+/* порядок глав под того, кто смотрит */
+function myFam(){const v=VIEWER;const par=PAR[v]||[];const sib=[...new Set(par.flatMap(x=>KIDS[x]||[]))].filter(x=>x!==v);const gpar=par.flatMap(x=>PAR[x]||[]);
+  const kids=KIDS[v]||[];const gk=kids.flatMap(x=>KIDS[x]||[]);
+  const ids=[...new Set([v,SPO[v],...kids,...gk,...par,...sib,...gpar].filter(Boolean))];
+  return `<h2>Твоя семья<small>Самые близкие. Нажми, чтобы открыть историю</small></h2><div class="myf">${ids.map(id=>`<button data-p="${id}">${av(id)}<b>${esc(sn(id))}</b><small>${esc(id===v?'это ты':relv(id))}</small></button>`).join('')}</div>`}
+function chCards(){const chs=PAGES.filter(p=>p.k==='ch');let last=null,h='';
+  chs.forEach(p=>{if(VIEWER&&p.lab!==last){h+=`${last!==null?'</div>':''}<div class="chg">${esc(p.lab)}</div><div class="chc">`;last=p.lab}else if(last===null){h+='<div class="chc">';last=''}
+   h+=`<button data-go="${p.s}"><span class="ci"><img src="${p.ch.hero}" alt="" loading="lazy" style="object-position:${p.ch.pos||'center'}"></span><b>${esc(p.ch.t)}</b><small>${p.ch.ppl.length} чел.</small></button>`});
+  return `<h2>${VIEWER?'Главы для тебя':'Главы книги'}<small>${VIEWER?'Сначала твои ветки, потом остальные':'Выбери ветку, с которой начать'}</small></h2>${h}</div>`}
+function bd(a,b){const ua=ups(a),ub=ups(b);let m=Infinity;for(const k in ua)if(k in ub)m=Math.min(m,ua[k]+ub[k]);return m}
+const minD=(v,ids)=>Math.min(...ids.map(id=>bd(v,id)));
+function chOrder(){const v=VIEWER;if(!v)return CH.map(c=>({c,lab:''}));const sp=SPO[v];const home=HOME[v];const sw=sp?W(sp,'мужа','жены'):'';
+  return CH.map((c,i)=>{let key,lab;
+    if(c.id===home){key=0;lab='Твоя ветка'}
+    else if(sp&&c.ppl.includes(sp)){key=200;lab='Семья '+sw}
+    else{const d=minD(v,c.ppl);if(d<Infinity){key=100+d;lab='Твои родные'}
+      else{const ds=sp?minD(sp,c.ppl):Infinity;if(ds<Infinity){key=300+ds;lab='Родня '+sw}else{key=400;lab='Родня через брак'}}}
+    return {c,lab,key:key+i/100}}).sort((a,b)=>a.key-b.key)}
+const PAGES=[],IDX={};
+function buildPages(){PAGES.length=0;PAGES.push({k:'intro',s:'intro',t:'Предисловие'});chOrder().forEach((o,i)=>PAGES.push({k:'ch',s:'ch-'+o.c.id,t:o.c.t,ch:o.c,n:i+1,lab:o.lab}));
+  PAGES.push({k:'tree',s:'tree',t:'Пять поколений'},{k:'map',s:'map',t:'Откуда мы'},{k:'time',s:'time',t:'Лента времени'},{k:'arch',s:'arch',t:'Фотоархив'},{k:'kino',s:'kino',t:'Видеоархив'},{k:'add',s:'add',t:'Добавить историю'});
+  for(const k in IDX)delete IDX[k];PAGES.forEach((p,i)=>IDX[p.s]=i)}
+buildPages();
 let cur=0;
 
 /* ===== renderers ===== */
@@ -889,6 +924,7 @@ const R={
  intro:()=>`<div class="kick">Предисловие</div><h1>Корни <em>нашей семьи</em></h1>
   <p class="lead">Здесь собрано всё, что удалось узнать о нашей семье: лица, судьбы, сёла, откуда мы родом, и истории, которые рассказывают родные.</p>
   ${VIEWER?'':`<div class="whoi"><b>Кто ты в семье?</b><p>Нажми на себя. Тогда в книге будет подписано, кто тебе кто.</p><div class="row">${VIEWERS.map(id=>`<button data-who="${id}">${av(id)}${esc(P[id].gn)}</button>`).join('')}<button data-whomore="1"><span class="more">+</span>Ещё</button></div></div>`}
+  ${VIEWER?myFam():''}${chCards()}
   <div class="quote">${cap('Это древо начал собирать Алексей Дмитриевич Кузьменко.')} Он записывал имена, даты и сёла, искал документы в архивах и бережно хранил фотографии. Мы продолжаем его работу.<small>С любовью, семья</small></div>
   <h2>Как читать книгу</h2>
   <div class="how"><div class="card"><div class="n">1</div><b>Листай главы</b><p>Стрелками внизу или свайпом. Глав всего ${PAGES.length}.</p></div>
@@ -903,7 +939,7 @@ const R={
   <p style="margin-top:24px"><button class="btn ghost" data-wall="1">Открыть большое древо со связями</button></p>`,
  map:()=>mapPage(),
  time:()=>timePage(),
- ch:pg=>{const c=pg.ch;return `<div class="hero"><div class="hi"><img class="bgb" src="${c.hero}" alt=""><img class="fg" src="${c.hero}" alt=""></div><div class="tx"><div class="kick">Глава ${pg.n} из ${CH.length}</div><h1>${esc(c.t)}</h1><p class="lead d">${esc(cap(c.intro))}</p></div></div>
+ ch:pg=>{const c=pg.ch;return `<div class="hero"><div class="hi"><img class="bgb" src="${c.hero}" alt=""><img class="fg" src="${c.hero}" alt=""></div><div class="tx"><div class="kick">${pg.lab?esc(pg.lab)+' · ':''}Глава ${pg.n} из ${CH.length}</div><h1>${esc(c.t)}</h1><p class="lead d">${esc(cap(c.intro))}</p></div></div>
   <p class="lead m">${esc(cap(c.intro))}</p>
   <h2>Люди этой главы<small>Нажми на карточку. Внутри можно листать дальше</small></h2>
   <div class="strip">${c.ppl.map(pcard).join('')}</div>
@@ -1100,7 +1136,7 @@ function render(dir){
 function go(s,dir){const i=IDX[s];if(i===undefined)return;const d=dir!==undefined?dir:(i>cur?1:i<cur?-1:0);cur=i;render(d)}
 $('prev').onclick=()=>cur>0&&go(PAGES[cur-1].s,-1);$('next').onclick=()=>cur<PAGES.length-1&&go(PAGES[cur+1].s,1);
 $('btnWall').onclick=()=>openWall();
-function openChs(){$('chl').innerHTML=PAGES.map((p,i)=>`<button data-go="${p.s}" class="${i===cur?'on':''}"><i>${i+1}</i>${esc(p.t)}${p.ch?`<small>${p.ch.ppl.length} чел.</small>`:''}</button>`).join('');$('chs').classList.add('on')}
+function openChs(){let last=null;$('chl').innerHTML=PAGES.map((p,i)=>{let hd='';const g=p.ch?(p.lab||'Главы'):'Книга';if(g!==last&&(VIEWER||i<2||!p.ch)){hd=`<div class="chlh">${esc(g)}</div>`;last=g}return hd+`<button data-go="${p.s}" class="${i===cur?'on':''}"><i>${i+1}</i>${esc(p.t)}${p.ch?`<small>${p.ch.ppl.length} чел.</small>`:''}</button>`}).join('');$('chs').classList.add('on')}
 $('btnCh').onclick=openChs;$('chs').addEventListener('click',e=>{if(e.target.id==='chs')$('chs').classList.remove('on')});
 addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;
   if(e.key==='Escape'){if($('lb').classList.contains('on'))return closeLb();if($('ov').classList.contains('on'))return closeP();if(!$('wall').classList.contains('hide'))return closeWall();$('chs').classList.remove('on');return}
@@ -1153,7 +1189,7 @@ function drawMe(){$('btnMe').innerHTML=VIEWER?`${av(VIEWER,30)}<span>Я — ${es
 const wpb=id=>`<button class="wp${id===VIEWER?' on':''}" data-who="${id}">${av(id)}<b>${esc(P[id].gn)}</b><small>${esc(P[id].sn.split(' ')[0])}</small></button>`;
 function openWho(){$('wg').innerHTML=VIEWERS.map(wpb).join('');$('wg2').innerHTML=VIEWERS2.filter(id=>P[id]).map(wpb).join('');const open=VIEWERS2.includes(VIEWER);$('wg2').classList.toggle('hide',!open);$('wmore').classList.toggle('hide',open);$('who').classList.remove('hide')}
 document.addEventListener('click',e=>{if(e.target.id==='wmore'){$('wg2').classList.remove('hide');e.target.classList.add('hide')}});
-function setViewer(v){VIEWER=v;store.viewer=v||'guest';save();$('who').classList.add('hide');drawMe();render(0);buildWall();if(WM==='f'&&FID)drawFocus(FID);if($('ov').classList.contains('on'))openP(OVL[OVI]);toast(v?`Привет, ${P[v].gn}! Подписи теперь для тебя`:'Смотрим как гость')}
+function setViewer(v){VIEWER=v;store.viewer=v||'guest';save();const s0=PAGES[cur].s;buildPages();cur=IDX[s0]??0;$('who').classList.add('hide');drawMe();render(0);buildWall();if(WM==='f'&&FID)drawFocus(FID);if($('ov').classList.contains('on'))openP(OVL[OVI]);toast(v?`Привет, ${P[v].gn}! Подписи теперь для тебя`:'Смотрим как гость')}
 $('wg').addEventListener('click',e=>{const b=e.target.closest('[data-who]');if(b)setViewer(b.dataset.who)});
 $('guest').onclick=()=>setViewer(null);
 $('btnMe').onclick=openWho;
