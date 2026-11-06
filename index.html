@@ -419,21 +419,6 @@ body{font-size:16.5px;line-height:1.65}
 .gal span,.gal button.print span{position:static!important;display:block;background:none!important;color:var(--muted)!important;padding:8px 0 0!important;font:400 13px/1.45 var(--sans)!important}
 .gal span::before{content:counter(g,decimal-leading-zero);display:block;font:600 10.5px/1 var(--sans);letter-spacing:.14em;color:var(--acc);margin-bottom:5px}
 
-/* обложка: одно фото */
-.mosaic{display:none}
-#cover{background:var(--bg);color:var(--ink);justify-content:flex-start}
-#cover::before{display:none}
-.cvph{position:relative;flex:1;min-height:0;margin:14px 14px 0;border-radius:var(--r);overflow:hidden;background:#2a241d}
-.cvph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
-.cvph small{position:absolute;left:14px;bottom:12px;color:#fff;font:500 11.5px var(--sans);letter-spacing:.12em;text-transform:uppercase;opacity:.85}
-.cvx{padding:22px 24px calc(30px + env(safe-area-inset-bottom))}
-.cvx .k{color:var(--muted);opacity:1}
-.cvx h1{font-size:clamp(52px,13vw,104px);margin:10px 0 12px}
-.cvx h1 em{color:var(--acc)}
-.cvx p{opacity:1;color:var(--muted);font-size:16px;margin-bottom:22px}
-.cta{background:var(--ink);color:#fff;border-radius:10px}
-@media(min-width:900px){.cta{align-self:flex-start}#cover{flex-direction:row-reverse;align-items:stretch}.cvph{flex:1.1;margin:20px}.cvx{flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px 64px}.cvx p{font-size:18px}}
-
 /* навигация */
 .pager{display:none!important}
 .bar{border-bottom:1px solid var(--line);padding:10px 20px}
@@ -518,7 +503,7 @@ body{font-size:16.5px;line-height:1.65}
 <body>
 
 <div id="cover">
-  <div class="cvph"><img src="photos/family-2025.jpg" alt="Вся семья, 2025"><small>Вся семья · 2025</small></div>
+  <div class="mosaic" id="mosaic"></div>
   <div class="cvx">
     <div class="k">Семейная книга</div>
     <h1>Корни <em>семьи</em></h1>
@@ -1058,7 +1043,7 @@ $('guest').onclick=()=>setViewer(null);
 $('btnMe').onclick=openWho;
 
 /* ===== cover ===== */
-const _MOS=['family-2025', 'wedding-grand', 'vla-mar', 'ev-zhen-20', 'ale-crown', 'old7', 'ev-studio-2014', 'guitar', 'ev-grandpa-kids-2007', 'ole-alx-2026', 'dmi', 'ev-cablecar-2022', 'ant-iva', 'ev-three-2018', 'yul-young', 'old3', 'ev-tree-2008', 'zhe', 'mis-fishing-2019', 'iva-2025', 'ole-little', 'ev-ole-zhen-2006', 'kuz-unknown', 'ole-roses-2019'].map(f=>`<div><img src="photos/${f}.jpg" alt=""></div>`).join('');
+$('mosaic').innerHTML=['family-2025', 'wedding-grand', 'vla-mar', 'ev-zhen-20', 'ale-crown', 'old7', 'ev-studio-2014', 'guitar', 'ev-grandpa-kids-2007', 'ole-alx-2026', 'dmi', 'ev-cablecar-2022', 'ant-iva', 'ev-three-2018', 'yul-young', 'old3', 'ev-tree-2008', 'zhe', 'mis-fishing-2019', 'iva-2025', 'ole-little', 'ev-ole-zhen-2006', 'kuz-unknown', 'ole-roses-2019'].map(f=>`<div><img src="photos/${f}.jpg" alt=""></div>`).join('');
 function openCover(){$('cover').classList.add('up');setTimeout(()=>$('cover').classList.add('hide'),900)}
 $('openBook').onclick=openCover;
 $('toCover').onclick=()=>{$('cover').classList.remove('hide');requestAnimationFrame(()=>$('cover').classList.remove('up'))};
