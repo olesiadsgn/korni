@@ -529,6 +529,11 @@ body{font-size:16.5px;line-height:1.65;background:var(--bg)}
 .jst b{display:block;font:500 14px var(--serif)}.jst span{font-size:13px}
 .ja{font-style:normal;color:var(--muted)}
 @media(max-width:600px){.js{flex-direction:column;align-items:stretch;gap:2px}.ja{line-height:1;margin-left:20px;transform:rotate(90deg);width:14px}}
+.hq li,.ask li{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.tell{flex:none;font:500 13px var(--sans);color:var(--ink);background:var(--soft);border-radius:999px;padding:4px 12px;text-decoration:none!important}
+.tell:hover{background:var(--ink);color:var(--bg)}
+.ask .btn{margin:6px 8px 4px 0;text-decoration:none!important;color:var(--bg)}
+.mi b em+em{color:var(--muted);font-weight:400}
 /* хронология в карточке */
 .ptl{list-style:none;padding:0;margin:0;position:relative}
 .ptl::before{content:"";position:absolute;left:84px;top:10px;bottom:10px;width:1px;background:var(--line)}
@@ -897,11 +902,11 @@ function bdays(days){const now=new Date();now.setHours(0,0,0,0);const out=[];
 function bdBlock(){const L=bdays(31);if(!L.length)return '';
   return `<h2>Скоро дни рождения<small>Кого поздравить в ближайший месяц</small></h2><div class="bdl">${L.map(x=>{const r=relv(x.id);const when=x.left===0?'сегодня':x.left===1?'завтра':`${x.d.getDate()} ${MON[x.d.getMonth()]}`;
     const sub=MEM(x.id)?`${W(x.id,'родился','родилась')} в ${x.y} году`:`${x.left===0?'исполняется':'исполнится'} ${ageW(x.age)}`;
-    return `<button class="bdr${x.left===0?' today':''}" data-p="${x.id}"><span class="bdd">${when}</span>${av(x.id,40)}<span><b>${esc(gp(x.id))}</b><small>${sub}${r?' · '+esc(r):''}</small></span></button>`}).join('')}</div>`}
+    return `<button class="bdr${x.left===0?' today':''}" data-p="${x.id}"><span class="bdd">${when}</span>${av(x.id,40)}<span><b>${esc(gp(x.id))} ${esc(fam(x.id))}</b><small>${sub}${r?' · '+esc(r):''}</small></span></button>`}).join('')}</div>`}
 function helpPage(){const ppl=Object.keys(P).filter(id=>(P[id].ask||[]).length);const n=ppl.reduce((a,id)=>a+P[id].ask.length,0);
   return `<div class="kick">Вопросы</div><h1>Помогите <em>узнать</em></h1><p class="lead">Чего мы пока не знаем о нашей семье. Всего ${n} ${ageW(n).split(' ')[1]==='год'?'вопрос':ageW(n).split(' ')[1]==='года'?'вопроса':'вопросов'}. Если знаете ответ хотя бы на один, расскажите. Проще всего голосом в семейном боте.</p>
   <p><a class="btn" href="${BOT}" target="_blank" rel="noopener">Ответить в боте</a></p>
-  ${ppl.map(id=>`<div class="hq"><button class="hqh" data-p="${id}">${av(id,44)}<span><b>${esc(gp(id))} ${esc(fam(id))}</b><small>${esc(relv(id)||P[id].rel||'')}</small></span></button><ul>${P[id].ask.map(a=>`<li>${esc(a)}</li>`).join('')}</ul></div>`).join('')}`}
+  ${ppl.map(id=>`<div class="hq"><button class="hqh" data-p="${id}">${av(id,44)}<span><b>${esc(gp(id))} ${esc(fam(id))}</b><small>${esc(relv(id)||P[id].rel||'')}</small></span></button><ul>${P[id].ask.map((a,i)=>`<li><span>${esc(a)}</span><a class="tell" href="${BOT}?start=a_${id}_${i}" target="_blank" rel="noopener">Рассказать</a></li>`).join('')}</ul></div>`).join('')}`}
 const JOUR=[
  {who:'dmi',steps:[['bor','1920','родился в Боромле'],['rov','1948','служба, родился Вадим'],['sar','1953','родился Алексей, семья осела в Саратове']]},
  {who:'vla',steps:[['','1924','родился в Ново-Тепловке'],['sim','до 1943','пулемётно-миномётное училище'],['sar','после войны','банк, квартира на Стрелке']]},
@@ -963,7 +968,7 @@ const PRINT=/^(old\d|kuz-unknown|guitar|vla-|ale-army|ale-portrait|iva-little|yu
 const gal=(list,big)=>`<div class="gal${big?' big':''}">${list.map(([f,c],i)=>`<button class="print${PRINT.test(f)?' old':''}" style="--rt:${(i%2?1:-1)*(0.6+(i%3)*0.5)}deg" data-lb="photos/${f}" data-cap="${esc(cap(c))}"><img src="photos/${f}" alt="${esc(cap(c))}" loading="lazy"><span>${esc(cap(c))}</span></button>`).join('')}</div>`;
 const ARCHM=Object.fromEntries(ARCH);
 const LEG=`<div class="legend"><span><span class="dot b-kuz"></span> Кузьменко</span><span><span class="dot b-vak"></span> Ваккер</span><span><span class="dot b-pet"></span> Петровы</span><span><span class="dot b-iva"></span> Ивановы</span><span><span class="dot b-me"></span> наше поколение</span></div>`;
-const GENS=[['I','до 1920-х',['aln','ivv','zhe','ivp']],['II','1920-е',['dmi','olg','vas','vla','ana','mar','olgi']],['III','1940–50-е',['ale','zoy','vad','pav','pet','ant']],['IV','1970–80-е',['yul','iva','dar','tat','kol']],['V','1990–2010-е',['ole','alx','zhen','mis','kos','sve','ivn']]];
+const GENS=[['I','до 1920-х',['aln','ivv','zhe','ivp']],['II','1920-е',['dmi','olg','vas','vla','ana','mar','olgi']],['III','1940–50-е',['ale','zoy','vad','vvp','svp','pav','pet','ant']],['IV','1970–80-е',['yul','iva','dar','kvp','tat','kol']],['V','1990–2010-е',['ole','alx','zhen','mis','kos','sve','ivn']]];
 const R={
  intro:()=>`<div class="kick">Предисловие</div><h1>Корни <em>нашей семьи</em></h1>
   <p class="lead">Здесь собрано всё, что удалось узнать о нашей семье: лица, судьбы, сёла, откуда мы родом, и истории, которые рассказывают родные.</p>
@@ -977,9 +982,9 @@ const R={
   <h2>Так древо выглядело у дедушки<small>Снимки экрана с его компьютера</small></h2>
   ${gal([['tree-1.jpg','Дедушкино древо'],['tree-2.jpg','Ещё один лист']])}
   <p style="margin-top:34px"><button class="btn" data-go="tree">Начать с пяти поколений →</button></p>`,
- tree:()=>`<div class="kick">Древо</div><h1>Пять <em>поколений</em></h1><p class="lead">Все, кого мы знаем, сверху вниз: от прапрадедов до младших. Нажми на человека, чтобы открыть его историю.</p>
+ tree:()=>`<div class="kick">Древо</div><h1>Пять <em>поколений</em></h1><p class="lead">Все, кого мы знаем. Сверху самые младшие, ниже их родители, бабушки и дедушки, и так до прапрадедов. Нажми на человека, чтобы открыть его историю.</p>
   ${LEG}
-  <div class="gens">${GENS.map(g=>`<div class="genr"><div class="gn">${g[0]}<small>${g[1]}</small></div><div class="row">${g[2].map(id=>`<button class="mi" data-p="${id}">${av(id)}<b>${esc(P[id].gn)}${pat(id)?`<em>${esc(pat(id))}</em>`:''}</b><small>${esc(relv(id)||fam(id))}</small></button>`).join('')}</div></div>`).join('')}</div>
+  <div class="gens">${GENS.slice().reverse().map(g=>`<div class="genr"><div class="gn">${g[0]}<small>${g[1]}</small></div><div class="row">${g[2].map(id=>`<button class="mi" data-p="${id}">${av(id)}<b>${esc(P[id].gn)}${pat(id)?`<em>${esc(pat(id))}</em>`:''}${fam(id)?`<em>${esc(fam(id))}</em>`:''}</b><small>${esc(relv(id)||'')}</small></button>`).join('')}</div></div>`).join('')}</div>
   <p style="margin-top:24px"><button class="btn ghost" data-wall="1">Открыть большое древо со связями</button></p>`,
  map:()=>mapPage(),
  time:()=>timePage(),
@@ -1028,7 +1033,7 @@ function personHTML(id){const p=P[id];
    ${vids.length?`<h2>Видео</h2>${vgrid(vids)}`:''}
    ${(PMAP[id]||[]).filter(k=>!(CHI[HOME[id]].pl||[]).includes(k)).map(k=>`<h2>Место</h2>${plFacts(k)}`).join('')}
    ${p.stories?`<h2>Воспоминания</h2>${p.stories.map(st=>`<div class="story">${esc(st[0])}<small>${esc(st[1])}</small></div>`).join('')}`:''}
-   <h2>Что ещё узнать</h2><div class="ask"><b>${p.stories?'Расскажите ещё':'Историй пока нет'}</b>${p.ask?`<ul>${p.ask.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>`:'<br>'}<a data-go="add">Добавить историю →</a></div>
+   <h2>Что ещё узнать</h2><div class="ask"><b>${p.stories?'Расскажите ещё':'Историй пока нет'}</b>${p.ask?`<ul>${p.ask.map((a,i)=>`<li><span>${esc(a)}</span><a class="tell" href="${BOT}?start=a_${id}_${i}" target="_blank" rel="noopener">Рассказать</a></li>`).join('')}</ul>`:'<br>'}<a class="btn" href="${BOT}?start=s_${id}" target="_blank" rel="noopener">Рассказать о ${esc(W(id,'нём','ней'))} в боте</a> <a data-go="add">или написать здесь →</a></div>
    ${kin.length?`<h2>Родные</h2><div class="chips">${kin.map(k=>`<button class="chip" data-p="${k}">${av(k,26)}${esc(short(k))}${relv(k)?` <em>${esc(relv(k))}</em>`:''}</button>`).join('')}</div>`:''}
    ${p.src?`<h2>Источники</h2><div class="src">${p.src.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${esc(x[0])} ↗</a>`).join('')}</div>`:''}
    <div class="swipeh">← листай людей главы стрелками сверху →</div></div>`}
@@ -1160,8 +1165,8 @@ function addPage(){return `<div class="kick">Ваши истории</div><h1>Д
    <label for="fBy">Кто рассказывает</label><input id="fBy" placeholder="Например: Юлия, дочь" value="${VIEWER?esc(P[VIEWER].gn):''}">
    <label for="fTxt">История</label><textarea id="fTxt" placeholder="Однажды..."></textarea>
    <div class="err" id="fErr"></div>
-   <div class="sendrow"><a class="btn" id="fTg" href="#" target="_blank" rel="noopener">Отправить в Telegram</a><a class="btn" id="fWa" href="#" target="_blank" rel="noopener" style="background:#1f8f4e">Отправить в WhatsApp</a><button class="btn ghost" id="fSend">Скопировать</button></div>
-   <p style="font-size:14px;color:var(--muted);margin:10px 0 0">Откроется мессенджер с готовым текстом. Выберите Олесю и отправьте.</p>
+   <div class="sendrow"><a class="btn" id="fBot" href="#" target="_blank" rel="noopener">Отправить в семейный бот</a><a class="btn ghost" id="fWa" href="#" target="_blank" rel="noopener">WhatsApp</a><button class="btn ghost" id="fSend">Скопировать</button></div>
+   <p style="font-size:14px;color:var(--muted);margin:10px 0 0">Текст скопируется сам. Откроется семейный бот: нажмите «Старт», если нужно, и вставьте текст в сообщение. Можно и просто рассказать голосом.</p>
    <div class="ok" id="fOk"></div>
   </div>
   <h2>Как ещё помочь</h2>
@@ -1211,10 +1216,10 @@ document.addEventListener('click',e=>{
 });
 
 function storyMsg(){const who=$('fWho').value,by=$('fBy').value.trim(),txt=$('fTxt').value.trim();return {ok:by&&txt.length>=10,by,txt,msg:`История для семейной книги\nО ком: ${P[who].nm}\nРассказывает: ${by}\n\n${txt}`}}
-document.addEventListener('click',e=>{const a=e.target.closest('#fTg,#fWa');if(!a)return;const m=storyMsg();$('fErr').textContent='';
+document.addEventListener('click',e=>{const a=e.target.closest('#fBot,#fWa');if(!a)return;const m=storyMsg();$('fErr').textContent='';
   if(!m.by){e.preventDefault();$('fErr').textContent='Напишите, кто рассказывает';$('fBy').focus();return}
   if(m.txt.length<10){e.preventDefault();$('fErr').textContent='Напишите саму историю, хотя бы пару предложений';$('fTxt').focus();return}
-  a.href=a.id==='fTg'?'https://t.me/share/url?url='+encodeURIComponent('https://olesiadsgn.github.io/korni/')+'&text='+encodeURIComponent(m.msg):'https://wa.me/?text='+encodeURIComponent(m.msg);
+  if(a.id==='fBot'){try{navigator.clipboard.writeText(m.msg)}catch(_){}a.href=BOT+'?start=s_'+$('fWho').value}else a.href='https://wa.me/?text='+encodeURIComponent(m.msg);
   $('fOk').textContent='Спасибо! Олеся добавит историю в книгу.'},true);
 function sendStory(){const who=$('fWho').value,by=$('fBy').value.trim(),txt=$('fTxt').value.trim();$('fErr').textContent='';$('fOk').textContent='';
   if(!by){$('fErr').textContent='Напишите, кто рассказывает';$('fBy').focus();return}
