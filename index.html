@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#FAF6EC;--card:#FFFDF8;--ink:#141414;--muted:rgba(20,20,20,.55);--line:rgba(20,20,20,.1);--soft:#F1ECE0;--acc:#141414;--dk:#2B2B2D;--dk2:#38383B;--gold:#C9A86A;
- --kuz:#B8924A;--vak:#8A95A6;--pet:#7C9670;--iva:#6E8DBF;--me:#141414;--r:18px;--tabh:64px;
+ --kuz:#B8924A;--vak:#8A95A6;--pet:#7C9670;--iva:#6E8DBF;--me:#A07E6E;--r:18px;--tabh:64px;
  --serif:"Alegreya",Georgia,serif;--sans:"Roboto",system-ui,-apple-system,sans-serif}
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -476,27 +476,25 @@ body{font-size:16.5px;line-height:1.65;background:var(--bg)}
 .line .y{font-family:var(--serif)}
 @media(max-width:560px){.line li.dec{top:52px}}
 
-/* жизни рода: полосы */
-.lc{background:var(--dk);border-radius:var(--r);color:#fff;margin:6px -6px 10px;overflow:hidden}
-.lch{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 18px 6px;font:400 13px var(--sans);color:rgba(255,255,255,.55)}
-.lcs{overflow-x:auto;padding:0 0 14px;-webkit-overflow-scrolling:touch}
-.lgrid{position:relative;width:calc(var(--nc) + var(--tw))}
-.lyr,.lrow{display:grid;grid-template-columns:var(--nc) var(--tw)}.lbr{display:block}.lbr div:last-child{display:none}.lbr div:first-child{display:inline-block;padding-right:12px}
-.lyr{position:sticky;top:0;height:26px;font:400 11px var(--sans);color:rgba(255,255,255,.4)}
-.lyr div:first-child,.lrow>button,.lbr div:first-child{position:sticky;left:0;z-index:2;background:var(--dk)}
-.lyr .yt{position:relative}.lyr .yt span{position:absolute;top:6px;transform:translateX(-50%)}
-.lbr div{font:500 15px var(--serif);color:var(--gold);padding:14px 0 4px 16px}
-.lrow{height:34px;align-items:center}
-.lrow>button{border:0;background:var(--dk);color:#fff;display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;height:100%;font:400 12.5px var(--sans);text-align:left;white-space:nowrap;overflow:hidden}
-.lrow>button .av{--s:22px;box-shadow:none;flex:none}.lrow>button span{overflow:hidden;text-overflow:ellipsis}
-.ltr{position:relative;height:100%;background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px calc(var(--py)*10))}
-.lbar{position:absolute;top:11px;height:12px;border-radius:999px;background:var(--b)}
-.lbar.open{background:linear-gradient(90deg,var(--b) 70%,transparent)}
-.ldot{position:absolute;top:13px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px var(--dk)}
-.lwar{position:absolute;top:0;bottom:0;background:rgba(201,168,106,.12);pointer-events:none}
-.lwar span{position:absolute;top:4px;left:4px;font:400 10px var(--sans);color:var(--gold)}
-.lrow:hover>button{color:var(--gold)}
-
+/* жизни рода: простые линии */
+.lc{background:var(--card);border-radius:var(--r);padding:12px 16px 16px;position:relative}
+.lax{position:sticky;top:58px;z-index:3;height:28px;margin:0 6px 4px;background:var(--card);font:400 12px var(--sans);color:var(--muted)}
+.lax span{position:absolute;top:8px;transform:translateX(-50%)}.lax span:first-child{transform:none}.lax span:last-child{transform:translateX(-100%)}
+.lbr{font:500 20px var(--serif);margin:18px 0 4px}
+.lrow{display:block;width:100%;border:0;background:none;padding:8px 0;text-align:left;border-radius:10px}
+.lrow:hover .lnm b{text-decoration:underline}
+.lnm{display:flex;align-items:center;gap:10px}
+.lnm .av{--s:30px;box-shadow:none;flex:none}
+.lnm b{display:block;font:500 15px/1.2 var(--sans)}
+.lnm small{display:block;font-size:12.5px;color:var(--muted);line-height:1.3}
+.ltr{display:block;position:relative;height:10px;margin:8px 6px 0}
+.lg{position:absolute;top:-4px;bottom:-4px;width:1px;background:var(--line)}
+.lwar{position:absolute;top:-4px;bottom:-4px;background:rgba(201,168,106,.25)}
+.lbar{position:absolute;top:0;height:10px;border-radius:999px;background:var(--b)}
+.lbar.open{background:linear-gradient(90deg,var(--b) 75%,color-mix(in srgb,var(--b) 25%,transparent))}
+.lleg{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;margin-top:16px;font-size:12.5px;color:var(--muted)}
+.lleg .lw{display:inline-block;width:14px;height:10px;border-radius:3px;background:rgba(201,168,106,.35);margin-right:6px;vertical-align:-1px}
+@media(max-width:560px){.lax{top:52px}}
 /* хронология в карточке */
 .ptl{list-style:none;padding:0;margin:0;position:relative}
 .ptl::before{content:"";position:absolute;left:84px;top:10px;bottom:10px;width:1px;background:var(--line)}
@@ -1058,16 +1056,15 @@ const EV=[
 ];
 let tlMode=store.tl||'all';
 function decs(list){const out=[];let last='';list.forEach(e=>{const y=parseInt(e[0]);const d=y<1900?'Давно':y<1940?'Начало XX века':Math.floor(y/10)*10+'-е';if(d!==last){out.push({dec:d});last=d}out.push(e)});return out}
-function lifeChart(){const Y0=1900,Y1=2027,NC=innerWidth<600?108:150,py=Math.max(2.2,Math.min(7,(Math.min(innerWidth,1100)-NC-60)/(Y1-Y0))),tw=(Y1-Y0)*py;const X=y=>(Math.max(Y0,Math.min(Y1,y))-Y0)*py;
-  let yrsH='';for(let y=1910;y<Y1;y+=(py<4?20:10))yrsH+=`<span style="left:${X(y)}px">${y}</span>`;
-  const war=`<div class="lwar" style="left:${X(1941)}px;width:${X(1945.4)-X(1941)}px"></div>`;
-  let rows='';CH.forEach(c=>{const ids=c.ppl.filter(id=>yr(P[id].born));if(!ids.length)return;rows+=`<div class="lbr"><div>${esc(c.t)}</div><div></div></div>`;
-   ids.sort((a,b)=>yr(P[a].born)-yr(P[b].born)).forEach(id=>{const p=P[id];const b=+yr(p.born),d=+yr(p.died);const e=d||2026;
-    const dots=ptl(id).slice(1).map(t=>parseInt(t[0])).filter(y=>y>b&&y<=e).map(y=>`<i class="ldot" style="left:${X(y+.5)}px"></i>`).join('');
-    rows+=`<div class="lrow" data-p="${id}"><button data-p="${id}">${av(id,22)}<span>${esc(sn(id))}</span></button><div class="ltr">${war}<span class="lbar b-${p.l}${d?'':' open'}" style="left:${X(b)}px;width:${Math.max(6,X(e+1)-X(b))}px"></span>${dots}</div></div>`})});
-  return `<div class="lc"><div class="lch"><span>Полоса это годы жизни, точки это события. Золотом отмечена война</span></div><div class="lcs"><div class="lgrid" style="--tw:${tw}px;--py:${py}px;--nc:${NC}px"><div class="lyr"><div></div><div class="yt">${yrsH}</div></div>${rows}</div></div></div>`}
+function lifeChart(){const Y0=1900,Y1=2026;const X=y=>((Math.max(Y0,Math.min(Y1,y))-Y0)/(Y1-Y0)*100).toFixed(2)+'%';
+  const ticks=[1900,1925,1950,1975,2000,2025];
+  const grid=ticks.map(y=>`<i class="lg" style="left:${X(y)}"></i>`).join('')+`<i class="lwar" style="left:${X(1941)};width:calc(${X(1945.4)} - ${X(1941)})"></i>`;
+  let rows='';CH.forEach(c=>{const ids=c.ppl.filter(id=>yr(P[id].born)&&HOME[id]===c.id);if(!ids.length)return;rows+=`<div class="lbr">${esc(c.t)}</div>`;
+   ids.sort((a,b)=>yr(P[a].born)-yr(P[b].born)).forEach(id=>{const p=P[id];const bo=+yr(p.born),d=+yr(p.died);const e=d||2026;
+    rows+=`<button class="lrow" data-p="${id}"><span class="lnm">${av(id,30)}<span><b>${esc(gp(id))}</b><small>${d?bo+'–'+d:'род. '+bo}${relv(id)?' · '+esc(relv(id)):''}</small></span></span><span class="ltr">${grid}<span class="lbar b-${p.l}${d?'':' open'}" style="left:${X(bo)};width:calc(${X(e)} - ${X(bo)})"></span></span></button>`})});
+  return `<div class="lc"><div class="lax">${ticks.map(y=>`<span style="left:${X(y)}">${y}</span>`).join('')}</div>${rows}<div class="lleg"><span><i class="lw"></i>годы войны</span><span>Нажми на человека, чтобы открыть его историю</span></div></div>`}
 function timePage(){return `<div class="kick">Лента времени</div><h1>От казаков <em>до наших дней</em></h1>
-  <p class="lead">Каждая полоса это жизнь одного человека. Нажми на имя, чтобы открыть его историю.</p>${lifeChart()}<h2>Год за годом</h2>
+  <h2>Кто когда жил<small>Каждая линия это жизнь одного человека</small></h2>${lifeChart()}<h2>Год за годом</h2>
   <div class="seg"><button data-tl="all" class="${tlMode==='all'?'on':''}">Всё</button><button data-tl="f" class="${tlMode==='f'?'on':''}">Только семья</button></div>
   <ul class="line">${decs(EV.filter(e=>tlMode==='all'||e[2]==='f').slice().sort((a,b)=>parseInt(a[0])-parseInt(b[0]))).map(e=>e.dec?`<li class="dec"><span>${e.dec}</span></li>`:`<li class="${e[2]==='f'?'fam':'hist'}"><span class="y">${e[0]}</span><span class="e">${e[3]?`<button data-p="${e[3]}">${av(e[3],34)}<u>${esc(cap(e[1]))}</u></button>`:`<span style="color:var(--muted)">${esc(e[1])}</span>`}</span></li>`).join('')}</ul>`}
 
