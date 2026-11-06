@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Корни семьи Олеси</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F7F4EE;--card:#fff;--ink:#1D1B18;--muted:#6F6A62;--line:#E3DDD3;--soft:#EEEAE2;--acc:#A8472B;
- --kuz:#B8892E;--vak:#7A879B;--pet:#64835A;--iva:#3F64A3;--me:#A8472B;--r:14px;--tabh:64px;
- --serif:"Fraunces",Georgia,serif;--sans:"Inter",system-ui,-apple-system,sans-serif}
+:root{--bg:#FAF6EC;--card:#FFFDF8;--ink:#141414;--muted:rgba(20,20,20,.55);--line:rgba(20,20,20,.1);--soft:#F1ECE0;--acc:#141414;--dk:#101010;--dk2:#1B1B1B;--gold:#C9A86A;
+ --kuz:#B8924A;--vak:#8A95A6;--pet:#7C9670;--iva:#6E8DBF;--me:#141414;--r:18px;--tabh:64px;
+ --serif:"Alegreya",Georgia,serif;--sans:"Roboto",system-ui,-apple-system,sans-serif}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font:16.5px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
@@ -377,127 +377,225 @@ img{display:block}
 .gal button.print:hover img{transform:none}
 .sendrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.sendrow a.btn{text-decoration:none}
 
-/* ============ REDESIGN: А «альбом сейчас» + Б сетка и подписи ============ */
-body{font-size:16.5px;line-height:1.65}
-.kick{font:600 11.5px/1 var(--sans);letter-spacing:.16em;color:var(--muted);display:flex;align-items:center;gap:10px;font-variant-numeric:tabular-nums}
-.kick::after{content:"";flex:1;height:1px;background:var(--line);max-width:120px}
-.pg h1{font-weight:400;letter-spacing:-.025em;margin:14px 0 18px}
-.pg h1 em{color:var(--acc)}
-.pg h2{font:400 28px/1.15 var(--serif);margin:56px 0 16px;padding-top:18px;border-top:1px solid var(--line)}
-.pg h2 small{font:500 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;margin-top:8px}
-.card{border:1px solid var(--line);box-shadow:none}
-.quote{background:none;border-left:2px solid var(--acc);border-radius:0;padding:4px 0 4px 22px;font-size:22px}
-.quote::before{display:none}
-.btn{border-radius:10px;padding:13px 20px}
-.btn.ghost{border-color:var(--ink)}
-.tag{border-radius:6px;font-size:11.5px;letter-spacing:.02em}
+/* ============ БРЕНД: тёмная оболочка + сливочные листы (по мотивам Monumoir) ============ */
+body{font-size:16.5px;line-height:1.65;background:var(--bg)}
+.kick{font:400 13px/1 var(--sans);letter-spacing:0;color:var(--muted);text-transform:none}
+.pg h1{font:500 clamp(40px,8vw,64px)/1 var(--serif);letter-spacing:-.01em;margin:10px 0 18px}
+.pg h1 em{color:inherit;font-weight:400}
+.pg h2{font:500 30px/1.1 var(--serif);margin:56px 0 16px;padding-top:18px;border-top:1px solid var(--line)}
+.pg h2 small{font:400 13px var(--sans);letter-spacing:0;text-transform:none;margin-top:6px}
+.lead{font:400 20px/1.55 var(--serif);color:var(--ink)}
+.card{border:0;box-shadow:none;background:var(--card)}
+.quote{background:var(--dk);color:#fff;border-radius:var(--r);padding:26px 24px;font:italic 400 22px/1.45 var(--serif)}
+.quote::before{display:none}.quote small{color:rgba(255,255,255,.55)}
+.btn{border-radius:999px;padding:14px 24px;font:500 15px var(--sans)}
+.btn.ghost{background:none;border:1px solid rgba(20,20,20,.25)}
+.tag{border-radius:999px;font:400 12px var(--sans);padding:3px 10px;background:var(--soft);color:var(--ink)}
+.tag.rel{background:var(--ink);color:var(--bg)}
+.tag.ver{background:#F3E6C8;color:#6b5320}
 .av{box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--b,#ccc)}
-.hero{border-radius:var(--r)}
-@media(min-width:900px){.hero{border:1px solid var(--line)}}
-.pc{border:1px solid var(--line);border-radius:var(--r)}
-.pc .ph{border-radius:9px}
-.pc:hover{box-shadow:none;transform:none;border-color:var(--ink)}
-.genr{border:1px solid var(--line)}
-.genr .gn{color:var(--ink)}
-.how .card{border:0;border-top:2px solid var(--ink);border-radius:0;background:none;padding:14px 0 0}
-.how .n{font:600 12px var(--sans);letter-spacing:.14em;color:var(--acc)}
-.how .n::before{content:"0"}
-.seg{border-radius:10px}.seg button{border-radius:7px}
-.facts div{border:1px solid var(--line)}
-.bio p{font:400 17.5px/1.75 var(--sans);color:#2b2722}
-.story{border-left:2px solid var(--acc);border-radius:0;background:none;padding:2px 0 2px 20px}
-.tl{border:1px solid var(--line)}
-.ovp{border-radius:22px 22px 0 0}
-@media(min-width:800px){.ovp{border-radius:22px}}
+.hero{border-radius:var(--r);background:var(--dk)}
+@media(min-width:900px){.hero{background:var(--card)}}
+.pc{background:none;padding:0;border-radius:0}
+.pc .ph{border-radius:14px}
+.pc:hover{box-shadow:none;transform:none}.pc:hover b{text-decoration:underline}
+.pc b{font:500 19px/1.15 var(--serif);margin:10px 0 2px}.pc small{margin:0}.pc .tag{margin:6px 0 0}
+.genr{background:var(--card)}.genr .gn{color:var(--ink);font-family:var(--serif)}
+.how .card{border-radius:var(--r);padding:20px}
+.how .n{font:500 34px/1 var(--serif);color:var(--ink)}
+.seg{border-radius:999px;background:var(--soft)}.seg button{border-radius:999px}
+.story{background:var(--card);border-radius:var(--r);font:italic 400 19px/1.55 var(--serif)}
+.ask{border-color:rgba(20,20,20,.18)}.ask a{color:var(--ink);text-decoration:underline}
+.src a{color:var(--ink)}
+.chip{background:var(--card);border-color:var(--line)}
+.place.hl{box-shadow:0 0 0 2px var(--ink)}
+.flyto{color:var(--ink)}
 
-/* gallery: ровная сетка, подписи под фото как в музее */
-.gal,.gal.big{columns:3 210px;column-gap:18px;counter-reset:g}
-@media(max-width:520px){.gal,.gal.big{columns:2;column-gap:12px}}
-.gal button,.gal button.print{background:none!important;padding:0!important;border-radius:0!important;transform:none!important;box-shadow:none!important;margin:0 0 20px!important;overflow:visible;counter-increment:g;text-align:left}
-.gal img{border-radius:8px;filter:none!important;background:var(--soft)}
+/* обложка */
+.cvx h1{font:500 clamp(58px,14vw,116px)/.92 var(--serif)}
+.cvx h1 em{color:rgba(255,255,255,.6);font-weight:400}
+.cvx .k{font:400 14px var(--sans);letter-spacing:0;text-transform:none}
+.cta{border-radius:999px;background:var(--bg);color:var(--ink);font:500 16px var(--sans)}
+
+/* фото: сетка, подписи под фото */
+.gal,.gal.big{columns:3 210px;column-gap:14px}
+@media(max-width:520px){.gal,.gal.big{columns:2;column-gap:10px}}
+.gal button,.gal button.print{background:none!important;padding:0!important;border-radius:0!important;transform:none!important;box-shadow:none!important;margin:0 0 18px!important;overflow:visible;text-align:left}
+.gal img{border-radius:12px;filter:none!important;background:var(--soft)}
 .gal button:hover img{transform:none;opacity:.9}
-.gal span,.gal button.print span{position:static!important;display:block;background:none!important;color:var(--muted)!important;padding:8px 0 0!important;font:400 13px/1.45 var(--sans)!important}
-.gal span::before{content:counter(g,decimal-leading-zero);display:block;font:600 10.5px/1 var(--sans);letter-spacing:.14em;color:var(--acc);margin-bottom:5px}
+.gal span,.gal button.print span{position:static!important;display:block;background:none!important;color:var(--muted)!important;padding:7px 2px 0!important;font:400 13px/1.45 var(--sans)!important}
 
-/* навигация */
+/* оболочка: тёмные панели */
 .pager{display:none!important}
-.bar{border-bottom:1px solid var(--line);padding:10px 20px}
+.bar{background:var(--dk);color:#fff;border:0;padding:10px 18px}
+.logo{font:500 24px/1 var(--serif);color:#fff}.logo em{color:var(--gold)}
+.pill{background:var(--dk2);border-color:#2c2c2c;color:#fff}
+.pill.me .av{box-shadow:none}
+.prog{background:#2a2a2a}.prog i{background:var(--gold)}
 .navd{display:flex;gap:2px;margin-right:8px}
-.navd button{border:0;background:none;border-radius:8px;padding:8px 12px;font:500 14.5px var(--sans);color:var(--muted)}
-.navd button:hover{color:var(--ink);background:var(--soft)}
-.navd button.on{color:var(--ink);background:var(--soft)}
+.navd button{border:0;background:none;border-radius:999px;padding:8px 14px;font:400 14.5px var(--sans);color:rgba(255,255,255,.6)}
+.navd button:hover,.navd button.on{color:#fff;background:#222}
 .tabs{display:none}
+#btnCh,#btnWall{display:none}
 @media(max-width:899px){
  .navd{display:none}
- #btnCh,#btnWall{display:none}
- .tabs{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:35;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
- .tabs button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 0;font:500 11px var(--sans);color:var(--muted)}
+ .tabs{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:35;background:var(--dk);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+ .tabs button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 0;font:400 11px var(--sans);color:rgba(255,255,255,.5)}
  .tabs button svg{width:23px;height:23px}
- .tabs button.on{color:var(--ink)}
- .tabs button.on svg{stroke:var(--acc)}
+ .tabs button.on{color:#fff}
  #book{padding-bottom:calc(var(--tabh) + 70px)}
  .wz{bottom:calc(var(--tabh) + 16px + env(safe-area-inset-bottom))}
  .chl{top:auto;bottom:calc(var(--tabh) + 10px + env(safe-area-inset-bottom));left:10px;right:10px;width:auto;max-height:70vh}
  .toast{top:auto;bottom:calc(var(--tabh) + 20px)}
 }
-@media(min-width:900px){#btnCh,#btnWall{display:none}}
+.chl{background:var(--dk2);color:#fff}.chl button:hover,.chl button.on{background:#2a2a2a}.chl button i,.chl button small{color:rgba(255,255,255,.45)}.chl button i{font-family:var(--serif)}
 
-/* конец страницы: следующая глава */
-.endnav{margin:70px 0 0;padding-top:22px;border-top:1px solid var(--ink);display:grid;gap:14px}
-.endnav .nx{display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;border:0;background:none;padding:0;text-align:left}
-.endnav .nx small{display:block;font:600 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.endnav .nx b{font:400 clamp(28px,5vw,40px)/1.05 var(--serif);letter-spacing:-.02em}
-.endnav .nx i{font-style:normal;font-size:28px;width:56px;height:56px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center}
-.endnav .nx:hover b{color:var(--acc)}
-.endnav .pv{justify-self:start;border:0;background:none;padding:0;color:var(--muted);font:500 14px var(--sans)}
+/* конец страницы */
+.endnav{margin:70px 0 0;display:grid;gap:14px}
+.endnav .nx{display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;border:0;background:var(--dk);color:#fff;border-radius:var(--r);padding:22px 22px;text-align:left}
+.endnav .nx small{display:block;font:400 13px var(--sans);color:rgba(255,255,255,.5);margin-bottom:4px}
+.endnav .nx b{font:500 clamp(26px,5vw,38px)/1.05 var(--serif)}
+.endnav .nx i{font-style:normal;font-size:22px;width:52px;height:52px;border-radius:50%;background:var(--bg);color:var(--ink);display:grid;place-items:center}
+.endnav .pv{justify-self:start;border:0;background:none;padding:0;color:var(--muted);font:400 14px var(--sans)}
 
 /* мягкий выбор «кто ты» */
-.whoi{border:1px solid var(--line);border-radius:var(--r);padding:20px;margin:26px 0;background:var(--card)}
-.whoi b{display:block;font:400 22px/1.2 var(--serif)}
+.whoi{border-radius:var(--r);padding:20px;margin:26px 0;background:var(--card)}
+.whoi b{display:block;font:500 24px/1.2 var(--serif)}
 .whoi p{margin:4px 0 14px;color:var(--muted);font-size:15px}
 .whoi .row{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;padding:4px 2px}
 .whoi .row::-webkit-scrollbar{display:none}
-.whoi .row button{border:0;background:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:6px;font:500 13px var(--sans);flex:none;width:62px}
+.whoi .row button{border:0;background:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:6px;font:400 13px var(--sans);flex:none;width:62px}
 .whoi .row .av{--s:52px}
 .whoi .row .more{width:52px;height:52px;border-radius:50%;border:1px dashed var(--muted);display:grid;place-items:center;font-size:20px;color:var(--muted)}
 
-/* хроника: десятилетия */
-.line li.dec{display:block;position:sticky;top:58px;z-index:2;background:var(--bg);padding:16px 0 8px}
+/* хроника списком */
+.line li.dec{display:block;position:sticky;top:58px;z-index:2;background:var(--bg);padding:18px 0 8px}
 .line li.dec::after{display:none}
-.line li.dec span{font:400 26px/1 var(--serif);letter-spacing:-.01em}
+.line li.dec span{font:500 28px/1 var(--serif)}
+.line li.fam::after{background:var(--ink);border-color:var(--ink)}
+.line .y{font-family:var(--serif)}
 @media(max-width:560px){.line li.dec{top:52px}}
 
-/* лайтбокс: листать */
+/* жизни рода: полосы */
+.lc{background:var(--dk);border-radius:var(--r);color:#fff;margin:6px -6px 10px;overflow:hidden}
+.lch{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 18px 6px;font:400 13px var(--sans);color:rgba(255,255,255,.55)}
+.lcs{overflow-x:auto;padding:0 0 14px;-webkit-overflow-scrolling:touch}
+.lgrid{position:relative;width:calc(var(--nc) + var(--tw))}
+.lyr,.lrow{display:grid;grid-template-columns:var(--nc) var(--tw)}.lbr{display:block}.lbr div:last-child{display:none}.lbr div:first-child{display:inline-block;padding-right:12px}
+.lyr{position:sticky;top:0;height:26px;font:400 11px var(--sans);color:rgba(255,255,255,.4)}
+.lyr div:first-child,.lrow>button,.lbr div:first-child{position:sticky;left:0;z-index:2;background:var(--dk)}
+.lyr .yt{position:relative}.lyr .yt span{position:absolute;top:6px;transform:translateX(-50%)}
+.lbr div{font:500 15px var(--serif);color:var(--gold);padding:14px 0 4px 16px}
+.lrow{height:34px;align-items:center}
+.lrow>button{border:0;background:var(--dk);color:#fff;display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;height:100%;font:400 12.5px var(--sans);text-align:left;white-space:nowrap;overflow:hidden}
+.lrow>button .av{--s:22px;box-shadow:none;flex:none}.lrow>button span{overflow:hidden;text-overflow:ellipsis}
+.ltr{position:relative;height:100%;background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px calc(var(--py)*10))}
+.lbar{position:absolute;top:11px;height:12px;border-radius:999px;background:var(--b)}
+.lbar.open{background:linear-gradient(90deg,var(--b) 70%,transparent)}
+.ldot{position:absolute;top:13px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px var(--dk)}
+.lwar{position:absolute;top:0;bottom:0;background:rgba(201,168,106,.12);pointer-events:none}
+.lwar span{position:absolute;top:4px;left:4px;font:400 10px var(--sans);color:var(--gold)}
+.lrow:hover>button{color:var(--gold)}
+
+/* хронология в карточке */
+.ptl{list-style:none;padding:0;margin:0;position:relative}
+.ptl::before{content:"";position:absolute;left:84px;top:10px;bottom:10px;width:1px;background:var(--line)}
+.ptl li{display:grid;grid-template-columns:76px 1fr;gap:20px;padding:7px 0;position:relative;font-size:15.5px}
+.ptl li::after{content:"";position:absolute;left:81px;top:15px;width:7px;height:7px;border-radius:50%;background:var(--ink)}
+.ptl li b{font:500 16px var(--serif);text-align:right}
+
+/* лайтбокс */
+#lb{background:rgba(8,8,8,.97)}
 #lb .lbn{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:22px}
 #lb .lbn.p{left:14px}#lb .lbn.n{right:14px}
-#lb .lbc{position:absolute;top:22px;left:20px;color:#fff;opacity:.6;font:500 13px var(--sans);letter-spacing:.1em}
+#lb .lbc{position:absolute;top:22px;left:20px;color:#fff;opacity:.6;font:400 13px var(--sans)}
 @media(max-width:600px){#lb .lbn{display:none}}
 
-/* древо: фокус-режим */
-.wtop .seg{margin:0;background:var(--card);border:1px solid var(--line)}
-#focus{position:absolute;inset:0;z-index:2;overflow:auto;background:var(--bg);padding:74px 16px calc(var(--tabh) + 40px);overscroll-behavior:contain}
+/* карточка человека: фото сверху, сливочный лист */
+#ov{background:rgba(0,0,0,.6)}
+.ovp{background:var(--dk);border-radius:24px 24px 0 0;position:relative}
+@media(min-width:800px){.ovp{border-radius:24px}}
+.ovh{position:absolute;top:0;left:0;right:0;z-index:5;background:none;border:0;padding:14px}
+.ovh .t{visibility:hidden}
+.ovh .ib{background:rgba(16,16,16,.35);border:0;color:#fff;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);width:44px;height:44px}
+.ovb{padding:0 0 60px;background:var(--dk)}
+.phero{position:relative;height:min(58vh,520px);background:var(--dk);overflow:hidden;display:block;width:100%;border:0;padding:0;text-align:left;cursor:zoom-in}
+.phero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 22%}
+.phero.noimg{height:300px;cursor:default;display:grid;place-items:center}
+.phero.noimg i{font:400 120px var(--serif);font-style:normal;color:rgba(255,255,255,.12)}
+.phero::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(16,16,16,.45),transparent 22%,transparent 48%,rgba(16,16,16,.92))}
+.pht{position:absolute;left:22px;right:22px;bottom:44px;z-index:2;color:#fff}
+.pht h1{font:500 clamp(36px,8vw,48px)/1.02 var(--serif);margin:0}
+.pht p{margin:8px 0 0;color:rgba(255,255,255,.7);font-size:15px}
+.psheet{position:relative;z-index:3;margin-top:-26px;background:var(--bg);border-radius:24px 24px 0 0;padding:24px 22px 40px;min-height:50vh}
+.pf{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px}
+.pf small{display:block;color:var(--muted);font-size:13px;line-height:1.3}
+.pf span{font-size:16px;line-height:1.35}
+.psheet h2{font:400 13px var(--sans);color:var(--muted);margin:26px 0 10px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.psheet .bio p{font:400 17px/1.7 var(--sans);color:var(--ink);margin:0 0 14px}
+.player{background:var(--dk);border-radius:999px;padding:8px 20px 8px 8px}
+.player .pl{background:var(--bg)}
+.player p{font-size:14px;color:rgba(255,255,255,.75)}
+.psheet .vc{background:none;padding:0}
+.swipeh{margin-top:24px}
+
+/* древо: тёмное */
+#wall{background:var(--dk)}
+#wall .canvas{background-color:var(--dk);background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px)}
+.lnk{stroke:rgba(255,255,255,.25)}
+.sp{stroke:var(--gold)}
+.gl{fill:rgba(255,255,255,.18);font-family:var(--serif)}
+.gls{fill:rgba(255,255,255,.3)}
+.pn b{color:#fff}.pn small{color:rgba(255,255,255,.5)}
+.pn .av{box-shadow:0 0 0 3px var(--dk),0 0 0 5px var(--b)}
+.pn .tag{background:rgba(255,255,255,.12);color:#fff}.pn .tag.rel{background:var(--bg);color:var(--ink)}
+.pn.me .av{box-shadow:0 0 0 3px var(--dk),0 0 0 6px #fff}
+.wz button{background:var(--dk2);border-color:#2c2c2c;color:#fff}
+.wtop .seg{margin:0;background:var(--dk2)}
+.wtop .seg button{color:rgba(255,255,255,.55)}.wtop .seg button.on{background:var(--bg);color:var(--ink)}
+#wallClose{background:var(--dk2)}
+#wall.fm .wz{display:none}
+#focus{position:absolute;inset:0;z-index:2;overflow:auto;background:var(--dk);color:#fff;padding:74px 16px calc(var(--tabh) + 40px);overscroll-behavior:contain}
 .fwrap{max-width:560px;margin:0 auto}
 .fwrap.in{animation:fz .3s ease}
 @keyframes fz{from{opacity:0;transform:scale(.98)}}
 .fr{margin:0 0 18px}
-.frt{font:600 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;text-align:center}
+.frt{font:400 13px var(--sans);color:rgba(255,255,255,.45);margin:0 0 10px;text-align:center}
 .frr{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 8px}
-.fc{border:0;background:none;padding:6px 2px;width:84px;display:flex;flex-direction:column;align-items:center;gap:6px;border-radius:12px}
-.fc:hover{background:var(--soft)}
-.fc .av{--s:58px}
-.fc b{font:500 14px/1.15 var(--sans)}
-.fc small{font-size:11.5px;color:var(--muted);line-height:1.2;margin-top:-3px}
-.fcen{border:1px solid var(--line);background:var(--card);border-radius:var(--r);padding:22px 18px;text-align:center;margin:6px 0 22px;position:relative}
-.fcen::before,.fcen::after{content:"";position:absolute;left:50%;width:1px;height:16px;background:var(--line)}
+.fc{border:0;background:none;color:#fff;padding:6px 2px;width:84px;display:flex;flex-direction:column;align-items:center;gap:6px;border-radius:14px}
+.fc:hover{background:#1f1f1f}
+.fc .av{--s:58px;box-shadow:0 0 0 2px var(--dk),0 0 0 3.5px var(--b)}
+.fc b{font:400 14px/1.15 var(--sans)}
+.fc small{font-size:11.5px;color:rgba(255,255,255,.5);line-height:1.2;margin-top:-3px}
+.fcen{background:var(--bg);color:var(--ink);border-radius:22px;padding:24px 18px;text-align:center;margin:6px 0 22px;position:relative}
+.fcen::before,.fcen::after{content:"";position:absolute;left:50%;width:1px;height:16px;background:rgba(255,255,255,.25)}
 .fcen::before{top:-17px}.fcen::after{bottom:-17px}
 .fcen>.av{--s:128px;margin:0 auto 14px}
-#wall.fm .wz{display:none}
-.fcen h3{font:400 30px/1.05 var(--serif);margin:0;letter-spacing:-.02em}
-.fcen h3 em{display:block;font-style:normal;font-size:20px;color:var(--muted)}
+.fcen h3{font:500 32px/1.05 var(--serif);margin:0}
+.fcen h3 em{display:block;font-style:normal;font-weight:400;font-size:21px;color:var(--muted)}
 .fcen .meta{color:var(--muted);font-size:14px;margin:6px 0 10px}
 .fcen .tag{margin-bottom:14px}
 .fcen .sp{display:flex;justify-content:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
-.fback{border:0;background:none;color:var(--muted);font:500 14px var(--sans);padding:0 0 12px}
+.fcen .fc{color:var(--ink)}.fcen .fc small{color:var(--muted)}.fcen .fc .av{box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--b)}
+.fback{border:0;background:none;color:rgba(255,255,255,.55);font:400 14px var(--sans);padding:0 0 12px}
+
+/* глобус: тёмный, круглые фото */
+.globe{background:radial-gradient(ellipse at 50% 30%,#1d1d1d,#0b0b0b 70%)}
+.g-sea{fill:#151515;stroke:#262626}
+.g-grat{stroke:rgba(255,255,255,.05)}
+.g-land{fill:#2b2b2b;stroke:#3d3d3d}
+.g-land.fam{fill:#3a362d}
+.g-route{stroke:var(--gold)}
+.gpin i{width:40px;height:40px;margin:-20px 0 0 -20px;background:none;box-shadow:none;display:block}
+.gpin i .av{--s:40px;box-shadow:0 0 0 2px rgba(255,255,255,.9),0 4px 14px rgba(0,0,0,.5)}
+.gpin.big i{width:48px;height:48px;margin:-24px 0 0 -24px}.gpin.big i .av{--s:48px}
+.gpin.left i{margin:-20px -20px 0 0}
+.gpin.guess i .av{box-shadow:0 0 0 2px var(--gold)}
+.gpin .ga{display:none!important}
+.gpin .gl{background:rgba(16,16,16,.75);color:#fff;font:400 12.5px var(--sans);margin-top:-20px;box-shadow:none}
+.gpin.small i,.gpin.mini i{width:26px;height:26px;margin:-13px 0 0 -13px}.gpin.small i .av,.gpin.mini i .av{--s:26px}
+.gbtn{background:rgba(27,27,27,.9)}.gbtn button{color:rgba(255,255,255,.6)}.gbtn button.on{background:var(--bg);color:var(--ink)}
+.gload{color:rgba(255,255,255,.5)}
 </style>
 </head>
 <body>
@@ -826,23 +924,35 @@ const R={
 
 /* ===== person overlay ===== */
 let OVL=[],OVI=0,OVC=null;
-function personHTML(id){const p=P[id];const parts=p.nm.split(' ');const hasLast=p.sn&&parts[0]===p.sn&&parts.length>1;const first=hasLast?parts.slice(1).join(' '):p.nm;const last=hasLast?parts[0]:'';
-  const facts=[["Родился(ась)",p.born],["Откуда",p.place],["Годы жизни",p.died?yrs(p):'']].filter(f=>f[1]).map(f=>`<div><small>${f[0]}</small><span>${esc(f[1])}</span></div>`).join('');
-  const r=relv(id);
+const MON=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+function fmtD(d){if(!d)return '';const m=String(d).match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})(.*)$/);return m?`${+m[1]} ${MON[+m[2]-1]} ${m[3]}${m[4]}`:d}
+const yr=t=>{const m=String(t||'').match(/\d{4}/);return m?m[0]:''};
+function ptl(id){const p=P[id];const out=[];const by=yr(p.born);const has=(y,re)=>out.some(o=>o[0].startsWith(y)&&(!re||re.test(o[1])));
+  if(by)out.push([by,W(id,'родился','родилась')+(p.place?'. '+p.place.replace(/^с\. /,''):'')]);
+  (p.tl||[]).forEach(t=>{if(by&&t[0]===by&&/родил/.test(t[1]))return;out.push([t[0],t[1]])});
+  EV.filter(e=>e[3]===id).forEach(e=>{if(has(e[0].slice(0,4)))return;if(by&&e[0]===by&&/родил/i.test(e[1]))return;out.push([e[0],cap(e[1])])});
+  (KIDS[id]||[]).forEach(k=>{const ky=yr(P[k].born);if(ky&&!has(ky,new RegExp(P[k].gn)))out.push([ky,W(k,'родился сын ','родилась дочь ')+P[k].gn])});
+  const dy=yr(p.died);if(dy&&!has(dy,/умер/))out.push([dy,W(id,'умер','умерла')]);
+  return out.sort((a,b)=>parseInt(a[0])-parseInt(b[0]))}
+function personHTML(id){const p=P[id];
+  const r=relv(id);const him=W(id,'Его','Её');
   const kin=[...new Set([...(PAR[id]||[]),...(SPO[id]?[SPO[id]]:[]),...(KIDS[id]||[]),...((PAR[id]||[]).flatMap(x=>KIDS[x]||[]))])].filter(x=>x!==id);
-  const ph=p.photo?`<div class="pph b-${p.l}${OLD.has(id)?' wk':''}"><img src="${p.photo}" alt="${esc(p.nm)}">${CAP[id]?`<div class="cap">${esc(CAP[id])}</div>`:''}</div>`:`<div class="pph noimg b-${p.l}"><i>${ini(id)}</i></div>`;
-  return `<div class="ptop"><div>${ph}</div><div>${r?`<div class="relbig">${VIEWER?av(VIEWER,26):''}<span>${id===VIEWER?'<b>Это ты</b>':`Тебе <b>${esc(r)}</b>`}</span></div>`:''}<h1>${esc(last)}${p.mn?`<span class="mn">урожд. ${esc(p.mn)}</span>`:''}<em>${esc(first)}</em></h1>${facts?`<div class="facts">${facts}</div>`:''}</div></div>
-   <h2>Жизнь${p.guess?'<span class="tag ver">есть версии</span>':''}</h2><div class="bio">${(p.bio||['Пока мы знаем об этом человеке только имя. Может быть, вы знаете больше?']).map(t=>`<p>${esc(t)}</p>`).join('')}</div>
+  const full=gp(id)+(fam(id)?' '+fam(id):'');
+  const facts=[["Откуда",p.place],[W(id,'Родился','Родилась'),fmtD(p.born)],["Годы жизни",p.died?yrs(p):''],["Урождённая",p.mn]].filter(f=>f[1]).map(f=>`<div><small>${f[0]}</small><span>${esc(f[1])}</span></div>`).join('')+(r?`<div><small>Тебе</small><span class="tag rel">${esc(id===VIEWER?'это ты':r)}</span></div>`:'');
+  const hero=p.photo?`<button class="phero${OLD.has(id)?' wk':''}" data-lb="${p.photo}" data-cap="${esc(CAP[id]||full)}"><img src="${p.photo}" alt="${esc(full)}"><div class="pht"><h1>${esc(full)}</h1>${p.rel?`<p>${esc(p.rel)}</p>`:''}</div></button>`:`<div class="phero noimg"><i>${ini(id)}</i><div class="pht"><h1>${esc(full)}</h1>${p.rel?`<p>${esc(p.rel)}</p>`:''}</div></div>`;
+  const tl=ptl(id);const vids=VIDS.filter(v=>v[3].includes(id));
+  return `${hero}<div class="psheet"><div class="pf">${facts}</div>
+   ${id==='ale'?`<h2>Голос</h2><button class="player" data-vid="zoy-55" data-cap="Юбилей Зои Владимировны. Алексей Дмитриевич с микрофоном"><div class="pl"><svg width="18" height="18" viewBox="0 0 24 24" fill="#141414"><path d="M8 5v14l11-7z"/></svg></div><p>Алексей Дмитриевич говорит тост на юбилее Зои Владимировны, 2008</p></button>`:''}
+   <h2>${him} история${p.guess?'<span class="tag ver">есть версии</span>':''}</h2><div class="bio">${(p.bio||['Пока мы знаем об этом человеке только имя. Может быть, вы знаете больше?']).map(t=>`<p>${esc(t)}</p>`).join('')}</div>
+   ${tl.length>1?`<h2>Хронология</h2><ul class="ptl">${tl.map(t=>`<li><b>${esc(t[0])}</b><span>${esc(t[1])}</span></li>`).join('')}</ul>`:''}
    ${GAL[id]?`<h2>Фотографии</h2>${gal(GAL[id])}`:''}
-   ${VIDS.some(v=>v[3].includes(id))?`<h2>Видео</h2>${vgrid(VIDS.filter(v=>v[3].includes(id)))}`:''}
-   ${p.tl?`<h2>Хронология</h2><ul class="tl">${p.tl.map(t=>`<li><b>${t[0]||'·'}</b><span>${esc(t[1])}</span></li>`).join('')}</ul>`:''}
-   ${id==='ale'?`<h2>Голос</h2><button class="player" data-vid="zoy-55" data-cap="Юбилей Зои Владимировны. Алексей Дмитриевич с микрофоном"><div class="pl"><svg width="18" height="18" viewBox="0 0 24 24" fill="#17140F"><path d="M8 5v14l11-7z"/></svg></div><p>Алексей Дмитриевич с микрофоном на юбилее Зои Владимировны. Запись с его кассет.</p></button>`:''}
+   ${vids.length?`<h2>Видео</h2>${vgrid(vids)}`:''}
    ${(PMAP[id]||[]).filter(k=>!(CHI[HOME[id]].pl||[]).includes(k)).map(k=>`<h2>Место</h2>${plFacts(k)}`).join('')}
-   <h2>Истории</h2>${(p.stories||[]).map(st=>`<div class="story">${esc(st[0])}<small>${esc(st[1])}</small></div>`).join('')}
-   <div class="ask"><b>${p.stories?'Расскажите ещё':'Историй пока нет'}</b>${p.ask?`<ul>${p.ask.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>`:'<br>'}<a data-go="add">Добавить историю →</a></div>
+   ${p.stories?`<h2>Воспоминания</h2>${p.stories.map(st=>`<div class="story">${esc(st[0])}<small>${esc(st[1])}</small></div>`).join('')}`:''}
+   <h2>Что ещё узнать</h2><div class="ask"><b>${p.stories?'Расскажите ещё':'Историй пока нет'}</b>${p.ask?`<ul>${p.ask.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>`:'<br>'}<a data-go="add">Добавить историю →</a></div>
    ${kin.length?`<h2>Родные</h2><div class="chips">${kin.map(k=>`<button class="chip" data-p="${k}">${av(k,26)}${esc(short(k))}${relv(k)?` <em>${esc(relv(k))}</em>`:''}</button>`).join('')}</div>`:''}
    ${p.src?`<h2>Источники</h2><div class="src">${p.src.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${esc(x[0])} ↗</a>`).join('')}</div>`:''}
-   <div class="swipeh">← свайп, чтобы листать людей главы →</div>`}
+   <div class="swipeh">← листай людей главы стрелками сверху →</div></div>`}
 function openP(id,dir){
   const ch=OVC&&CHI[OVC].ppl.includes(id)?OVC:HOME[id];OVC=ch;OVL=CHI[ch].ppl;OVI=OVL.indexOf(id);
   const b=$('ovb');b.innerHTML=personHTML(id);b.scrollTop=0;b.classList.remove('in-r','in-l');if(dir){void b.offsetWidth;b.classList.add(dir>0?'in-r':'in-l')}
@@ -894,7 +1004,7 @@ async function initGlobe(){
   const rt=svg.append('g').selectAll('path').data(ROUTES).join('path').attr('class','g-route');
   const pins=d3.select('#gpins');const PM=Object.fromEntries(PTS.map(p=>[p.k,p]));
   const pe=pins.selectAll('div').data(PTS).join('div').attr('class',d=>'gpin'+(d.k==='nik'||d.k==='mon'?' left':'')+(d.big?' big':'')+(d.guess?' guess':'')).attr('data-pt',d=>d.k)
-   .html(d=>`<i></i><span class="gl">${d.n}</span><span class="ga">${d.who.slice(0,3).map(id=>av(id,22)).join('')}</span>`);
+   .html(d=>`<i>${av(d.who.find(x=>P[x].photo)||d.who[0],40)}</i><span class="gl">${d.n}</span><span class="ga">${d.who.slice(0,3).map(id=>av(id,22)).join('')}</span>`);
   function draw(){proj.rotate(st.rot).scale(base*st.k);sph.attr('d',path);grat.attr('d',path);cs.attr('d',path);
     rt.attr('d',r=>path({type:'LineString',coordinates:[[PM[r[0]].lon,PM[r[0]].lat],[PM[r[1]].lon,PM[r[1]].lat]]}));
     const c=[-st.rot[0],-st.rot[1]];
@@ -948,7 +1058,16 @@ const EV=[
 ];
 let tlMode=store.tl||'all';
 function decs(list){const out=[];let last='';list.forEach(e=>{const y=parseInt(e[0]);const d=y<1900?'Давно':y<1940?'Начало XX века':Math.floor(y/10)*10+'-е';if(d!==last){out.push({dec:d});last=d}out.push(e)});return out}
+function lifeChart(){const Y0=1900,Y1=2027,NC=innerWidth<600?108:150,py=Math.max(2.2,Math.min(7,(Math.min(innerWidth,1100)-NC-60)/(Y1-Y0))),tw=(Y1-Y0)*py;const X=y=>(Math.max(Y0,Math.min(Y1,y))-Y0)*py;
+  let yrsH='';for(let y=1910;y<Y1;y+=(py<4?20:10))yrsH+=`<span style="left:${X(y)}px">${y}</span>`;
+  const war=`<div class="lwar" style="left:${X(1941)}px;width:${X(1945.4)-X(1941)}px"></div>`;
+  let rows='';CH.forEach(c=>{const ids=c.ppl.filter(id=>yr(P[id].born));if(!ids.length)return;rows+=`<div class="lbr"><div>${esc(c.t)}</div><div></div></div>`;
+   ids.sort((a,b)=>yr(P[a].born)-yr(P[b].born)).forEach(id=>{const p=P[id];const b=+yr(p.born),d=+yr(p.died);const e=d||2026;
+    const dots=ptl(id).slice(1).map(t=>parseInt(t[0])).filter(y=>y>b&&y<=e).map(y=>`<i class="ldot" style="left:${X(y+.5)}px"></i>`).join('');
+    rows+=`<div class="lrow" data-p="${id}"><button data-p="${id}">${av(id,22)}<span>${esc(sn(id))}</span></button><div class="ltr">${war}<span class="lbar b-${p.l}${d?'':' open'}" style="left:${X(b)}px;width:${Math.max(6,X(e+1)-X(b))}px"></span>${dots}</div></div>`})});
+  return `<div class="lc"><div class="lch"><span>Полоса это годы жизни, точки это события. Золотом отмечена война</span></div><div class="lcs"><div class="lgrid" style="--tw:${tw}px;--py:${py}px;--nc:${NC}px"><div class="lyr"><div></div><div class="yt">${yrsH}</div></div>${rows}</div></div></div>`}
 function timePage(){return `<div class="kick">Лента времени</div><h1>От казаков <em>до наших дней</em></h1>
+  <p class="lead">Каждая полоса это жизнь одного человека. Нажми на имя, чтобы открыть его историю.</p>${lifeChart()}<h2>Год за годом</h2>
   <div class="seg"><button data-tl="all" class="${tlMode==='all'?'on':''}">Всё</button><button data-tl="f" class="${tlMode==='f'?'on':''}">Только семья</button></div>
   <ul class="line">${decs(EV.filter(e=>tlMode==='all'||e[2]==='f').slice().sort((a,b)=>parseInt(a[0])-parseInt(b[0]))).map(e=>e.dec?`<li class="dec"><span>${e.dec}</span></li>`:`<li class="${e[2]==='f'?'fam':'hist'}"><span class="y">${e[0]}</span><span class="e">${e[3]?`<button data-p="${e[3]}">${av(e[3],34)}<u>${esc(cap(e[1]))}</u></button>`:`<span style="color:var(--muted)">${esc(e[1])}</span>`}</span></li>`).join('')}</ul>`}
 

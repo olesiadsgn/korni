@@ -5,126 +5,128 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Брендбук · Корни семьи</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;1,400&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F7F4EE;--card:#fff;--ink:#1D1B18;--muted:#6F6A62;--line:#E3DDD3;--soft:#EEEAE2;--acc:#A8472B;
- --kuz:#B8892E;--vak:#7A879B;--pet:#64835A;--iva:#3F64A3;
- --serif:"Fraunces",Georgia,serif;--sans:"Inter",system-ui,sans-serif}
+:root{--bg:#FAF6EC;--card:#FFFDF8;--ink:#141414;--muted:rgba(20,20,20,.55);--line:rgba(20,20,20,.1);--soft:#F1ECE0;--dk:#101010;--dk2:#1B1B1B;--gold:#C9A86A;
+ --serif:"Alegreya",Georgia,serif;--sans:"Roboto",system-ui,sans-serif}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
-main{max-width:1040px;margin:0 auto;padding:48px 24px 100px}
-.k{font:600 11.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px}
-.k::after{content:"";flex:1;height:1px;background:var(--line);max-width:120px}
-h1{font:400 clamp(46px,8vw,84px)/1 var(--serif);letter-spacing:-.025em;margin:14px 0 18px}
-h1 em,h2 em{color:var(--acc)}
-h2{font:400 32px/1.1 var(--serif);letter-spacing:-.02em;margin:72px 0 8px;padding-top:20px;border-top:1px solid var(--ink)}
-h2 small{display:block;font:600 11.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--acc);margin-bottom:10px}
-p.lead{font:400 21px/1.5 var(--serif);max-width:680px;color:#3b352d}
+.top{background:var(--dk);color:#fff;padding:72px 24px 80px}
+.top .in,main{max-width:1000px;margin:0 auto}
+main{padding:20px 24px 100px}
+.k{font:400 14px var(--sans);color:rgba(255,255,255,.55)}
+h1{font:500 clamp(56px,11vw,110px)/.95 var(--serif);margin:12px 0 18px}
+h1 em{font-weight:400;color:rgba(255,255,255,.6)}
+.top p{font:400 20px/1.55 var(--serif);color:rgba(255,255,255,.8);max-width:640px;margin:0}
+h2{font:500 36px/1.1 var(--serif);margin:64px 0 14px;padding-top:18px;border-top:1px solid var(--line)}
+h2 small{display:block;font:400 13px var(--sans);color:var(--muted);margin-bottom:8px}
 p{max-width:680px}
-.grid{display:grid;gap:14px}
-.c4{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
-.c2{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
-.sw{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
-.sw i{display:block;height:110px}
-.sw div{padding:12px 14px;font-size:14px}
-.sw b{display:block;font-weight:600}
-.sw code{font:500 12.5px ui-monospace,Menlo,monospace;color:var(--muted)}
-.box{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:22px}
-.lbl{font:600 10.5px/1 var(--sans);letter-spacing:.14em;color:var(--acc);text-transform:uppercase}
-.spec{font:500 12.5px ui-monospace,Menlo,monospace;color:var(--muted);margin-top:8px}
-.do,.dont{border-top:2px solid var(--pet);padding-top:12px}
-.dont{border-color:var(--acc)}
-.do b,.dont b{font:600 11.5px var(--sans);letter-spacing:.14em;text-transform:uppercase}
-.do b{color:var(--pet)}.dont b{color:var(--acc)}
+.grid{display:grid;gap:14px}.c3{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}.c2{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.sw{border-radius:18px;overflow:hidden;background:var(--card)}
+.sw i{display:block;height:100px}
+.sw div{padding:12px 16px;font-size:14px}.sw b{display:block;font-weight:500}.sw code{font:400 12.5px ui-monospace,Menlo,monospace;color:var(--muted)}
+.box{border-radius:18px;background:var(--card);padding:22px}
+.box.d{background:var(--dk);color:#fff}
+.lbl{font:400 13px var(--sans);color:var(--muted)}.box.d .lbl{color:rgba(255,255,255,.5)}
+.spec{font:400 12.5px ui-monospace,Menlo,monospace;color:var(--muted);margin-top:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;background:var(--ink);color:#fff;font:500 15px var(--sans);padding:14px 24px}
+.btn.g{background:none;color:var(--ink);border:1px solid rgba(20,20,20,.25)}
+.btn.c{background:var(--bg);color:var(--ink)}
+.tag{display:inline-flex;font:400 12px var(--sans);border-radius:999px;padding:3px 10px;background:var(--soft)}.tag.r{background:var(--ink);color:var(--bg)}
+.player{display:flex;align-items:center;gap:14px;background:var(--dk);color:#fff;border-radius:999px;padding:8px 20px 8px 8px;margin-top:14px}
+.player i{width:44px;height:44px;border-radius:50%;background:var(--bg);color:var(--ink);display:grid;place-items:center;font-style:normal}
+.player span{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.25)}
+.f{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-top:14px}.f small{display:block;color:var(--muted);font-size:13px}
+.lines{background:var(--dk);border-radius:18px;padding:18px;margin-top:14px}
+.lines div{height:12px;border-radius:999px;margin:12px 0;position:relative}
+.lines b{position:absolute;top:2px;width:8px;height:8px;border-radius:50%;background:#fff}
+.do,.dont{border-top:2px solid var(--ink);padding-top:12px}.dont{border-color:rgba(20,20,20,.25)}
+.do b,.dont b{font:500 14px var(--sans)}
 ul{padding-left:18px;margin:8px 0}li{margin:4px 0}
-.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:10px;background:var(--ink);color:#fff;font:600 15px var(--sans);padding:13px 20px}
-.btn.g{background:var(--card);color:var(--ink);border:1px solid var(--ink)}
-.tag{display:inline-flex;font:600 11.5px var(--sans);border-radius:6px;padding:4px 10px;background:var(--soft);color:var(--muted)}
-.tag.rel{background:var(--ink);color:#fff}
-.av{width:56px;height:56px;border-radius:50%;display:inline-grid;place-items:center;font:500 20px var(--serif);background:#fff;box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--b)}
-.ph{aspect-ratio:4/5;border-radius:8px;background:linear-gradient(135deg,#d9d0c3,#b9ad9c)}
-.cap{color:var(--muted);font-size:13px;line-height:1.45;margin-top:8px}
-.cap.n2::before{content:"02"}
-.cap::before{content:"01";display:block;font:600 10.5px/1 var(--sans);letter-spacing:.14em;color:var(--acc);margin-bottom:5px}
-.quote{border-left:2px solid var(--acc);padding:4px 0 4px 22px;font:italic 400 22px/1.5 var(--serif)}
-.gridviz{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;height:90px}
-.gridviz i{background:color-mix(in srgb,var(--acc) 12%,transparent);border-radius:4px}
-@media(max-width:600px){.gridviz{grid-template-columns:repeat(4,1fr)}.gridviz i:nth-child(n+5){display:none}}
-a{color:var(--acc)}
+a{color:var(--ink)}
 </style>
 </head>
-<body><main>
-<div class="k">Брендбук · версия 1 · ноябрь 2026</div>
+<body>
+<div class="top"><div class="in">
+<div class="k">Брендбук · версия 2 · ноябрь 2026</div>
 <h1>Корни <em>семьи</em></h1>
-<p class="lead">Семейный альбом, но сейчас. Тёплый и спокойный, как у бабушки дома. С порядком музейного архива: ровная сетка, подписи под фото, номера.</p>
+<p>Фото и истории в главной роли. Оболочка тёмная, как в кинозале. Текст для чтения лежит на сливочных листах, как страницы старой книги. Цвета почти нет, работают фото и шрифт.</p>
+</div></div>
+<main>
 
-<h2><small>01 · Идея</small>Три слова</h2>
+<h2><small>01 · Принцип</small>Тёмное смотрим, светлое читаем</h2>
 <div class="grid c2">
- <div class="box"><b>Тепло</b><p>Молочный фон, живые фото без фильтров. Ничего не стилизуем под старину. Старые снимки и так старые.</p></div>
- <div class="box"><b>Порядок</b><p>Как в музее. Подпись под фото, номер, год и место. Ровная сетка, тонкие линии.</p></div>
- <div class="box"><b>Просто</b><p>Сайт открывают бабушка и папа с телефона. Крупные кнопки, понятные слова, всё в один тап.</p></div>
+ <div class="box d"><div class="lbl">Тёмное</div><p>Обложка, верхняя и нижняя панели, древо, глобус, фото на весь экран, верх карточки человека. Там, где главное это картинка.</p></div>
+ <div class="box"><div class="lbl">Сливочное</div><p>Главы, истории, хроника, лист с фактами в карточке. Там, где нужно спокойно читать.</p></div>
 </div>
 
 <h2><small>02 · Цвет</small>Палитра</h2>
-<p>Основа: молочный, белый и графит. Акцент один, терракота. Его мало: курсив в заголовках, номера, линии цитат.</p>
-<div class="grid c4">
- <div class="sw"><i style="background:#F7F4EE;border-bottom:1px solid var(--line)"></i><div><b>Молоко</b><code>#F7F4EE · фон</code></div></div>
- <div class="sw"><i style="background:#FFFFFF;border-bottom:1px solid var(--line)"></i><div><b>Бумага</b><code>#FFFFFF · карточки</code></div></div>
- <div class="sw"><i style="background:#1D1B18"></i><div><b>Графит</b><code>#1D1B18 · текст, кнопки</code></div></div>
- <div class="sw"><i style="background:#A8472B"></i><div><b>Терракота</b><code>#A8472B · акцент</code></div></div>
- <div class="sw"><i style="background:#6F6A62"></i><div><b>Серый</b><code>#6F6A62 · подписи</code></div></div>
- <div class="sw"><i style="background:#E3DDD3"></i><div><b>Линия</b><code>#E3DDD3 · рамки</code></div></div>
+<div class="grid c3">
+ <div class="sw"><i style="background:#101010"></i><div><b>Ночь</b><code>#101010 · оболочка</code></div></div>
+ <div class="sw"><i style="background:#1B1B1B"></i><div><b>Графит</b><code>#1B1B1B · кнопки на тёмном</code></div></div>
+ <div class="sw"><i style="background:#FAF6EC;box-shadow:inset 0 0 0 1px var(--line)"></i><div><b>Сливки</b><code>#FAF6EC · листы для чтения</code></div></div>
+ <div class="sw"><i style="background:#FFFDF8;box-shadow:inset 0 0 0 1px var(--line)"></i><div><b>Бумага</b><code>#FFFDF8 · карточки</code></div></div>
+ <div class="sw"><i style="background:#141414"></i><div><b>Чернила</b><code>#141414 · текст, кнопки</code></div></div>
+ <div class="sw"><i style="background:#C9A86A"></i><div><b>Латунь</b><code>#C9A86A · только мелочи</code></div></div>
 </div>
-<p style="margin-top:22px">Цвета веток. Только кольцо вокруг аватара и точка в легенде. Не заливаем ими фон.</p>
-<div class="grid c4">
- <div class="sw"><i style="background:#B8892E"></i><div><b>Кузьменко</b><code>#B8892E</code></div></div>
- <div class="sw"><i style="background:#7A879B"></i><div><b>Ваккер</b><code>#7A879B</code></div></div>
- <div class="sw"><i style="background:#64835A"></i><div><b>Петровы</b><code>#64835A</code></div></div>
- <div class="sw"><i style="background:#3F64A3"></i><div><b>Ивановы</b><code>#3F64A3</code></div></div>
+<p style="margin-top:18px">Латунь берём точечно: точка в логотипе, линия прогресса, связь мужа и жены на древе, полоса войны на шкале. Цвета веток мягкие и живут только в кольцах аватаров и полосах жизни.</p>
+<div class="grid c3">
+ <div class="sw"><i style="background:#B8924A"></i><div><b>Кузьменко</b><code>#B8924A</code></div></div>
+ <div class="sw"><i style="background:#8A95A6"></i><div><b>Ваккер</b><code>#8A95A6</code></div></div>
+ <div class="sw"><i style="background:#7C9670"></i><div><b>Петровы</b><code>#7C9670</code></div></div>
+ <div class="sw"><i style="background:#6E8DBF"></i><div><b>Ивановы</b><code>#6E8DBF</code></div></div>
 </div>
 
-<h2><small>03 · Шрифты</small>Два шрифта</h2>
+<h2><small>03 · Шрифты</small>Alegreya и Roboto</h2>
 <div class="grid c2">
- <div class="box"><div class="lbl">Заголовки · Fraunces 400</div><div style="font:400 48px/1.02 var(--serif);letter-spacing:-.025em;margin-top:12px">Кузьменко <em style="color:var(--acc)">из Боромли</em></div><div class="spec">clamp(38–64px) · межбуквенный −2.5% · курсив для второй части</div></div>
- <div class="box"><div class="lbl">Текст · Inter 400 / 600</div><p style="margin:12px 0 0">Дмитрий Алексеевич служил в пограничных войсках. После войны он с семьёй осел в Саратове.</p><div class="spec">16.5–17.5px · строка 1.65–1.75</div></div>
- <div class="box"><div class="lbl">Метки · Inter 600 капсом</div><div style="margin-top:14px" class="k">Глава 1 из 5</div><div class="spec">11.5px · разрядка 16% · с тонкой линией</div></div>
- <div class="box"><div class="lbl">Вводный абзац · Fraunces 400</div><p style="font:400 21px/1.5 var(--serif);margin:12px 0 0">Здесь собрано всё, что удалось узнать о нашей семье.</p><div class="spec">19–21px · только первый абзац страницы</div></div>
+ <div class="box"><div class="lbl">Заголовки · Alegreya 500, вторая часть 400 курсивом</div><div style="font:500 50px/1 var(--serif);margin-top:12px">От казаков <i style="font-weight:400">до наших дней</i></div><div class="spec">40–64px на страницах · 36–48px на фото · до 116px на обложке</div></div>
+ <div class="box"><div class="lbl">Текст · Roboto 400</div><p style="margin:12px 0 0">С Зоей они вместе с восемнадцати лет. Она ждала его из армии, и они писали друг другу письма.</p><div class="spec">16.5–17px · строка 1.65–1.7</div></div>
+ <div class="box"><div class="lbl">Подписи и метки · Roboto 400, серым</div><div class="f"><div><small>Откуда</small>Саратов</div><div><small>Родился</small>29 июля 1953</div></div><div class="spec">13px · без капса и разрядки</div></div>
+ <div class="box"><div class="lbl">Вводный абзац · Alegreya 400</div><p style="font:400 20px/1.55 var(--serif);margin:12px 0 0">Здесь собрано всё, что удалось узнать о нашей семье.</p></div>
 </div>
 
-<h2><small>04 · Сетка</small>Сетка и отступы</h2>
-<div class="gridviz"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<h2><small>04 · Карточка человека</small>Фото сверху, лист снизу</h2>
 <ul>
- <li>Десктоп: 12 колонок, ширина 1160px, поля 40px. Телефон: 4 колонки, поля 20px.</li>
- <li>Шаг отступов: 4 · 8 · 12 · 16 · 24 · 40 · 56 · 72.</li>
- <li>Разделы отделяем тонкой линией сверху и отступом 56px.</li>
- <li>Скругления: 14px у карточек, 8px у фото, 10px у кнопок.</li>
- <li>Тени не используем. Вместо них тонкая рамка 1px.</li>
+ <li>Сверху большое фото на всю ширину. Имя, отчество и фамилия лежат прямо на фото, внизу.</li>
+ <li>Снизу выезжает сливочный лист со скруглением 24px.</li>
+ <li>Порядок: факты в две колонки, голос, история, хронология, фото, видео, место, воспоминания, что ещё узнать, родные, источники.</li>
+ <li>Хронология собирается сама: рождение, события из книги, рождение детей.</li>
+ <li>Кнопки поверх фото круглые и полупрозрачные.</li>
+</ul>
+<div class="box"><div class="f"><div><small>Откуда</small>Саратов</div><div><small>Тебе</small><span class="tag r">дедушка</span></div></div><div class="player"><i>▶</i><span></span>Голос</div></div>
+
+<h2><small>05 · Шкала рода</small>Жизни полосами</h2>
+<p>Каждый человек это полоса от рождения. Ветки идут блоками, точки на полосе это события. Полоса живущих мягко растворяется вправо. Золотом отмечены годы войны.</p>
+<div class="lines">
+ <div style="background:#B8924A;width:62%;margin-left:6%"><b style="left:30%"></b><b style="left:70%"></b></div>
+ <div style="background:linear-gradient(90deg,#B8924A 70%,transparent);width:58%;margin-left:42%"><b style="left:20%"></b><b style="left:46%"></b></div>
+ <div style="background:#7C9670;width:70%;margin-left:12%"><b style="left:15%"></b></div>
+</div>
+
+<h2><small>06 · Детали</small>Компоненты</h2>
+<div class="grid c2">
+ <div class="box"><div class="lbl">Кнопки-капсулы</div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"><span class="btn">Открыть историю</span><span class="btn g">Всё древо</span></div></div>
+ <div class="box d"><div class="lbl">На тёмном</div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"><span class="btn c">Открыть книгу →</span></div></div>
+ <div class="box"><div class="lbl">Скругления</div><p style="margin:10px 0 0">Карточки 18px. Фото 12–14px. Лист карточки 24px. Кнопки и метки полностью круглые.</p></div>
+ <div class="box"><div class="lbl">Тени</div><p style="margin:10px 0 0">Не используем. Слои отделяем цветом: тёмное и сливочное.</p></div>
+</div>
+
+<h2><small>07 · Навигация</small>Как ходим по книге</h2>
+<ul>
+ <li>Телефон: тёмная нижняя панель. Главы, Древо, Хроника, Места, Архив.</li>
+ <li>Компьютер: те же пункты в тёмной верхней строке.</li>
+ <li>В конце страницы тёмная карточка «Дальше» на следующую главу.</li>
+ <li>Древо на телефоне начинается с режима «Родные рядом».</li>
+ <li>Глобус тёмный. Места отмечены круглыми фото людей оттуда.</li>
 </ul>
 
-<h2><small>05 · Компоненты</small>Детали</h2>
+<h2><small>08 · Тексты</small>Как пишем</h2>
 <div class="grid c2">
- <div class="box"><div class="lbl">Кнопки</div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"><span class="btn">Открыть историю</span><span class="btn g">Всё древо</span></div></div>
- <div class="box"><div class="lbl">Аватар и родство</div><div style="display:flex;gap:16px;align-items:center;margin-top:14px"><span class="av" style="--b:var(--kuz)">А</span><span class="av" style="--b:var(--pet)">З</span><span class="tag">дедушка</span><span class="tag rel">это ты</span></div></div>
- <div class="box"><div class="lbl">Фото с подписью</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px"><div><div class="ph"></div><div class="cap">Боромля, родные у дома</div></div><div><div class="ph" style="background:linear-gradient(135deg,#cfd6d9,#9eaab0)"></div><div class="cap n2">Катя, Боромля</div></div></div></div>
- <div class="box"><div class="lbl">Цитата</div><div class="quote" style="margin-top:14px">Это древо начал собирать Алексей Дмитриевич Кузьменко.</div></div>
+ <div class="do"><b>Так</b><ul><li>Короткие человеческие предложения.</li><li>Только факты от родных и из документов.</li><li>Лёгкий юмор, если он к месту.</li><li>Полные имена с отчеством.</li></ul></div>
+ <div class="dont"><b>Не так</b><ul><li>Длинные тире и пафос.</li><li>Догадки без метки «версия».</li><li>Телефоны, адреса, почты.</li><li>Яркие цвета, тени, рукописные шрифты.</li></ul></div>
 </div>
 
-<h2><small>06 · Навигация</small>Как ходим по книге</h2>
-<ul>
- <li>Телефон: нижняя панель из пяти пунктов. Главы, Древо, Хроника, Места, Архив.</li>
- <li>Компьютер: те же пункты в верхней строке.</li>
- <li>В конце каждой страницы большая ссылка «Дальше» на следующую главу.</li>
- <li>Древо на телефоне открывается с одним человеком в центре. Сверху родители, снизу дети. Тап по человеку переносит его в центр.</li>
- <li>Фото открываются на весь экран и листаются свайпом.</li>
-</ul>
-
-<h2><small>07 · Тексты</small>Как пишем</h2>
-<div class="grid c2">
- <div class="do"><b>Так</b><ul><li>Короткие человеческие предложения.</li><li>Только факты, которые рассказали родные.</li><li>Лёгкий юмор, если он к месту.</li><li>Полные имена с отчеством в карточках.</li></ul></div>
- <div class="dont"><b>Не так</b><ul><li>Длинные тире и пафос.</li><li>Догадки, выданные за факты. Версии помечаем меткой «версия».</li><li>Телефоны, адреса, почты.</li><li>Сепия, наклонённые полароиды, рукописные шрифты.</li></ul></div>
-</div>
-
-<h2><small>08 · Движение</small>Анимация</h2>
-<p>Только по делу. Плавное появление страницы и переход между людьми, 0.3 секунды. Старые фото на аватарах медленно наливаются цветом. Без параллакса. Если в телефоне включено «уменьшить движение», анимации выключаются.</p>
+<h2><small>09 · Движение</small>Анимация</h2>
+<p>Фото на обложке медленно плывут. Страницы и люди сменяются плавно, за 0.3 секунды. Старые фото на аватарах наливаются цветом. Если в телефоне включено «уменьшить движение», анимации выключаются.</p>
 <p style="margin-top:40px"><a href="../">← Вернуться в книгу</a></p>
 </main></body></html>
