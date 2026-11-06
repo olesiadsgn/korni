@@ -37,7 +37,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--acc)}
 <div class="wrap">
   <h1>Кто на этих фотографиях?</h1>
   <p class="lead">Здесь старые семейные фото. Под каждым можно написать, кто на нём, примерно какой год и где снимали. Если не знаете, просто пропустите фото.</p>
-  <p class="lead">Всё, что вы напишете, сохраняется на этом телефоне или компьютере. Можно закрыть страницу и вернуться потом. Когда закончите, нажмите внизу «Отправить Олесе».</p>
+  <p class="lead">Всё, что вы напишете, сохраняется на этом телефоне или компьютере. Можно закрыть страницу и вернуться потом. Когда закончите, нажмите внизу «Отправить Олесе». Подписи сразу придут Олесе, Телеграм не нужен.</p>
   <div class="who">
     <label for="by">Кто подписывает</label>
     <input id="by" placeholder="Например: бабушка Зоя">
@@ -46,12 +46,12 @@ input:focus,textarea:focus{outline:none;border-color:var(--acc)}
 </div>
 <div class="bar">
   <span class="cnt" id="cnt"></span>
-  <a class="btn" id="send" href="#" target="_blank" rel="noopener">Отправить Олесе</a>
+  <button class="btn" id="send">Отправить Олесе</button>
   <button class="btn ghost" id="copy">Скопировать</button>
 </div>
 <div id="zoom"><img alt=""></div>
 <script>
-const N=17,KEY='korni-podpisi-3';
+const N=16,KEY='korni-podpisi-3';
 let S={};try{S=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const pad=n=>String(n).padStart(2,'0');
@@ -81,9 +81,21 @@ function text(){
   for(let i=1;i<=N;i++){const id=pad(i);if(!filled(id))continue;const v=S[id];
     t+=`\nФото ${i}:`;if((v.who||'').trim())t+=`\nКто: ${v.who.trim()}`;if((v.year||'').trim())t+=`\nГод: ${v.year.trim()}`;if((v.where||'').trim())t+=`\nГде: ${v.where.trim()}`;if((v.note||'').trim())t+=`\nЕщё: ${v.note.trim()}`;t+='\n'}
   return t}
-document.getElementById('send').addEventListener('click',e=>{
-  if(!Object.keys(S).some(k=>k!=='_by'&&filled(k))){e.preventDefault();alertMsg('Сначала подпишите хотя бы одно фото');return}
-  e.currentTarget.href='https://t.me/share/url?url='+encodeURIComponent('https://olesiadsgn.github.io/korni/podpisi/')+'&text='+encodeURIComponent(text());
+/* Адрес приёма подписей (веб-приложение семейного бота). Если пусто, текст копируется и открывается чат с Олесей. */
+const ENDPOINT='';
+document.getElementById('send').addEventListener('click',async e=>{
+  const items=[];for(let i=1;i<=N;i++){const id=pad(i);if(filled(id))items.push(Object.assign({id,n:i},S[id]))}
+  if(!items.length){alertMsg('Сначала подпишите хотя бы одно фото');return}
+  const btn=e.currentTarget;btn.disabled=true;btn.textContent='Отправляю…';
+  if(ENDPOINT){
+    try{await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({kind:'captions',by:(S._by||'').trim(),items})});
+      btn.textContent='Отправлено ✓';alertMsg('Спасибо! Олеся получила подписи.');return}
+    catch(err){}
+  }
+  try{await navigator.clipboard.writeText(text())}catch(err){}
+  btn.disabled=false;btn.textContent='Отправить Олесе';
+  alertMsg('Текст скопирован. Вставьте его в чат с Олесей.');
+  setTimeout(()=>{location.href='https://t.me/arkharovaoa'},1200);
 });
 document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(text());alertMsg('Скопировано. Вставьте в сообщение Олесе.')}catch(e){alertMsg('Не получилось скопировать')}};
 function alertMsg(m){document.getElementById('cnt').textContent=m;setTimeout(count,3500)}
