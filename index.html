@@ -12,6 +12,7 @@
  --serif:"Alegreya",Georgia,serif;--sans:"Roboto",system-ui,-apple-system,sans-serif}
 *{box-sizing:border-box}
 html,body{margin:0}
+body{overflow-x:hidden}#book{overflow-x:clip}
 body{background:var(--bg);color:var(--ink);font:16.5px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
 a{color:inherit}button{font:inherit;color:inherit;cursor:pointer}
 .hide{display:none!important}
@@ -502,6 +503,10 @@ body{font-size:16.5px;line-height:1.65;background:var(--bg)}
 .chc button:hover b{text-decoration:underline}
 .chlh{font:400 12px var(--sans);color:rgba(255,255,255,.45);padding:12px 12px 4px}
 @media(min-width:900px){.myf{margin:0;padding-left:0}}
+#psrch{width:100%;margin:6px 0 4px;padding:12px 14px;border-radius:12px;border:0;background:#4a4a4e;color:#fff;font:400 16px var(--sans)}
+#psrch::placeholder{color:rgba(255,255,255,.5)}
+#psres button{display:flex;align-items:center;gap:10px}#psres .av{--s:28px;box-shadow:none}#psres small{color:rgba(255,255,255,.5)}
+.psno{padding:10px 12px;color:rgba(255,255,255,.5);font-size:14px}
 /* хронология в карточке */
 .ptl{list-style:none;padding:0;margin:0;position:relative}
 .ptl::before{content:"";position:absolute;left:84px;top:10px;bottom:10px;width:1px;background:var(--line)}
@@ -667,7 +672,7 @@ const P = {
   bio:["Мама Ольги Ивановны и бабушка дедушки Алексея. Фамилию Ваккер носила по мужу.", "Работала главным эпидемиологом Саратова.", "Мужа выслали на север, а Елизавета осталась.", "Дедушка Алексей сохранил о ней ссылки на «Дорогу памяти». Похоже, она прошла и войну."],
   ask:["Где и когда родилась?","Воевала ли она?"]},
  dmi:{l:"kuz",rel:"Военный врач, ветеран войны",gn:"Дмитрий",sn:"Кузьменко",nm:"Кузьменко Дмитрий Алексеевич",born:"08.11.1920",died:"05.12.1997, Саратов",place:"с. Боромля, Сумская обл.",photo:"photos/dmi.jpg",
-  bio:["Родился в 1920 году в казачьей Боромле. В сентябре 1940-го, ещё до войны, ушёл в армию и прослужил шестнадцать лет.", "Начинал красноармейцем, в начале войны был пулемётчиком. С 1942 по 1944 год учился, а потом стал военным фельдшером. Фельдшером он и прослужил до 1956 года, под конец старшим. В семье его так и вспоминают: военный врач. Служил в 24-й стрелковой бригаде и в 45-м пограничном отряде, прошёл войну.", "После армии в 36 лет пошёл учиться. В 1961 году окончил Саратовский институт механизации сельского хозяйства и стал инженером-электриком.", "После войны семья поездила по местам службы. В 1948 году в Ровно родился Вадим, потом переехали в Саратов, и там в 1953-м родился Алексей. Со службы ушёл в 1956 году.", "Жену звали Ольга Ивановна. В 1985 году его наградили орденом Отечественной войны II степени.", "Похоронен в Саратове на Еврейском кладбище. В той же ограде лежит Елена Семёновна Кузьменко (1925–1980). Кто она, мы пока не знаем."],
+  bio:["Родился в 1920 году в казачьей Боромле.", "В сентябре 1940-го, ещё до войны, ушёл в армию и прослужил шестнадцать лет. Начинал красноармейцем, в начале войны был пулемётчиком. Служил в 24-й стрелковой бригаде и в 45-м пограничном отряде, прошёл войну.", "С 1942 по 1944 год учился и стал военным фельдшером. Фельдшером и прослужил до 1956 года, под конец старшим. В семье его так и вспоминают: военный врач.", "Служба водила семью по разным местам. В 1948 году в Ровно родился Вадим, потом переехали в Саратов, и там в 1953-м родился Алексей.", "Когда ушёл со службы, в 36 лет пошёл учиться. В 1961 году окончил Саратовский институт механизации сельского хозяйства и стал инженером-электриком.", "Жену звали Ольга Ивановна. В 1985 году его наградили орденом Отечественной войны II степени.", "Похоронен в Саратове на Еврейском кладбище. В той же ограде лежит Елена Семёновна Кузьменко (1925–1980). Кто она, мы пока не знаем. Интересно, что у Елизаветы Семёновны, мамы Ольги Ивановны, то же отчество."],
   tl:[["1920","родился в Боромле"],["1940","призван в армию, красноармеец"],["1941","пулемётчик"],["1944","военный фельдшер"],["1941–1945","война, медаль «За победу над Германией»"],["1948","в Ровно родился сын Вадим"],["1953","в Саратове родился сын Алексей"],["1955","медаль «За боевые заслуги»"],["1956","завершил службу старшим фельдшером"],["1961","диплом инженера-электрика"],["1985","орден Отечественной войны II степени"],["1997","умер в Саратове"]],
   ask:["Каким он был по характеру?","Где работал инженером-электриком?","Что рассказывал о войне?","Кто такая Елена Семёновна (1925–1980), похороненная рядом?"],
   src:[["Память народа: карточка офицера","https://pamyat-naroda.ru/heroes/person-hero85184921/"],["Память народа: награды","https://pamyat-naroda.ru/heroes/person-hero82845228/"],["Место захоронения","https://toldot.com/life/cemetery/graves_107840.html"],["Елена Семёновна","https://toldot.com/life/cemetery/graves_107839.html"]]},
@@ -683,7 +688,7 @@ const P = {
   stories:[["Показывал мне свои боевые ранения.","Олеся, правнучка"]],
   ask:["Где хранятся его награды и документы?","Как он познакомился с Марией?"]},
  mar:{l:"pet",rel:"Жена Владимира Петрова",mn:"Балалаева",gn:"Мария",sn:"Петрова",nm:"Петрова Мария Васильевна",born:"19.12.1926",died:"18.10.2014, Саратов",place:"с. Братское, Балашовский р-н",
-  bio:["Родилась в 1926 году в селе Братское. В семье её звали бабушка Маня.", "Когда началась война, она была совсем девчонкой и работала на тракторах.", "Её мама Анна Фёдоровна Балалаева родилась 1 января 1901 года. Братья: Александр Васильевич Балалаев и Виктор Черкасов, он жил в Горьком.", "Работала бухгалтером.", "С Владимиром вырастили сына Владимира и дочь Зою."],
+  bio:["Родилась в 1926 году в селе Братское. В семье её звали бабушка Маня. Когда началась война, она была совсем девчонкой и работала на тракторах.", "Потом работала бухгалтером. С Владимиром вырастили сына Владимира и дочь Зою.", "Её мама Анна Фёдоровна Балалаева родилась 1 января 1901 года. Братья: Александр Васильевич Балалаев и Виктор Черкасов, он жил в Горьком."],
   ask:["Что она рассказывала про войну?","Как познакомилась с Владимиром?","Какой была бабушкой?"]},
  vvp:{l:"pet",rel:"Брат Зои Кузьменко",gn:"Владимир",sn:"Петров",nm:"Петров Владимир Владимирович",born:"28.11.1947",
   bio:["Старший брат бабушки Зои. Как и она, окончил технический институт и стал инженером-конструктором.", "Первая жена Лида, она тоже 1947 года. От этого брака у него сын Константин. Вторая жена Светлана."],
@@ -953,12 +958,12 @@ const MON=['января','февраля','марта','апреля','мая',
 function fmtD(d){if(!d)return '';const m=String(d).match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})(.*)$/);return m?`${+m[1]} ${MON[+m[2]-1]} ${m[3]}${m[4]}`:d}
 const yr=t=>{const m=String(t||'').match(/\d{4}/);return m?m[0]:''};
 function ptl(id){const p=P[id];const out=[];const by=yr(p.born);const has=(y,re)=>out.some(o=>o[0].startsWith(y)&&(!re||re.test(o[1])));
-  if(by)out.push([by,W(id,'родился','родилась')+(p.place?'. '+p.place.replace(/^с\. /,''):'')]);
-  (p.tl||[]).forEach(t=>{if(by&&t[0]===by&&/родил/.test(t[1]))return;out.push([t[0],t[1]])});
+  if(by)out.push([by,W(id,'Родился','Родилась')+(p.place?' · '+p.place.replace(/^(с|д|г)\. /,''):'')]);
+  let lk=by||'0';(p.tl||[]).forEach(t=>{if(by&&t[0]===by&&/родил/i.test(t[1]))return;const k=t[0]||lk;lk=k;out.push([t[0]||'·',t[1],k])});
   EV.filter(e=>e[3]===id).forEach(e=>{if(has(e[0].slice(0,4)))return;if(by&&e[0]===by&&/родил/i.test(e[1]))return;out.push([e[0],cap(e[1])])});
   (KIDS[id]||[]).forEach(k=>{const ky=yr(P[k].born);if(ky&&!has(ky,new RegExp(P[k].gn)))out.push([ky,W(k,'родился сын ','родилась дочь ')+P[k].gn])});
-  const dy=yr(p.died);if(dy&&!has(dy,/умер/))out.push([dy,W(id,'умер','умерла')]);
-  return out.sort((a,b)=>parseInt(a[0])-parseInt(b[0]))}
+  const dy=yr(p.died);if(dy&&!has(dy,/умер|ушёл|ушла|не стало/i))out.push([dy,W(id,'Умер','Умерла')]);
+  return out.map((o,i)=>[o[0],o[1],parseInt(o[2]||o[0])||0,i]).sort((a,b)=>a[2]-b[2]||a[3]-b[3]).map(o=>[o[0],o[1].charAt(0).toUpperCase()+o[1].slice(1)])}
 function personHTML(id){const p=P[id];
   const r=relv(id);const him=W(id,'Его','Её');
   const kin=[...new Set([...(PAR[id]||[]),...(SPO[id]?[SPO[id]]:[]),...(KIDS[id]||[]),...((PAR[id]||[]).flatMap(x=>KIDS[x]||[]))])].filter(x=>x!==id);
@@ -982,9 +987,10 @@ function openP(id,dir){
   const ch=OVC&&CHI[OVC].ppl.includes(id)?OVC:HOME[id];OVC=ch;OVL=CHI[ch].ppl;OVI=OVL.indexOf(id);
   const b=$('ovb');b.innerHTML=personHTML(id);b.scrollTop=0;b.classList.remove('in-r','in-l');if(dir){void b.offsetWidth;b.classList.add(dir>0?'in-r':'in-l')}
   $('ovT').textContent=`${CHI[ch].t} · ${OVI+1} из ${OVL.length}`;$('ovPrev').disabled=OVI<=0;$('ovNext').disabled=OVI>=OVL.length-1;
+  if(!$('ov').classList.contains('on'))history.pushState({layer:'ov'},'',location.href);
   $('ov').classList.add('on');document.body.style.overflow='hidden';wake(b);
   if(location.hash!=='#p-'+id)history.replaceState(null,'','#p-'+id)}
-function closeP(){$('ov').classList.remove('on');OVC=null;if(!$('wall').classList.contains('hide'))return;document.body.style.overflow='';history.replaceState(null,'','#'+PAGES[cur].s)}
+function closeP(pop){if(!pop&&history.state&&history.state.layer==='ov'){history.back();return}$('ov').classList.remove('on');OVC=null;if(!$('wall').classList.contains('hide'))return;document.body.style.overflow='';if(!pop)history.replaceState(null,'','#'+PAGES[cur].s)}
 $('ovX').onclick=closeP;$('ov').addEventListener('click',e=>{if(e.target.id==='ov')closeP()});
 $('ovPrev').onclick=()=>OVI>0&&openP(OVL[OVI-1],-1);$('ovNext').onclick=()=>OVI<OVL.length-1&&openP(OVL[OVI+1],1);
 {let x0=null,y0=null;const b=$('ovb');b.addEventListener('touchstart',e=>{if(e.target.closest('.gal,input,textarea'))return;x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
@@ -1125,11 +1131,14 @@ function render(dir){
   const nxp=PAGES[cur+1],pvp=PAGES[cur-1];pgEl.insertAdjacentHTML('beforeend',`<nav class="endnav">${nxp?`<button class="nx" data-go="${nxp.s}"><span><small>Дальше</small><b>${esc(nxp.t)}</b></span><i>→</i></button>`:`<button class="nx" data-go="intro"><span><small>Это конец книги</small><b>Вернуться в начало</b></span><i>↑</i></button>`}${pvp?`<button class="pv" data-go="${pvp.s}">← ${esc(pvp.t)}</button>`:''}</nav>`);
   setTab();window.scrollTo({top:0});wake(pgEl);
   if(!$('ov').classList.contains('on')&&location.hash!=='#'+pg.s)history.replaceState(null,'','#'+pg.s)}
-function go(s,dir){const i=IDX[s];if(i===undefined)return;const d=dir!==undefined?dir:(i>cur?1:i<cur?-1:0);cur=i;render(d)}
+function go(s,dir){const i=IDX[s];if(i===undefined)return;if(location.hash!=='#'+s&&!$('ov').classList.contains('on'))history.pushState(null,'','#'+s);const d=dir!==undefined?dir:(i>cur?1:i<cur?-1:0);cur=i;render(d)}
 $('prev').onclick=()=>cur>0&&go(PAGES[cur-1].s,-1);$('next').onclick=()=>cur<PAGES.length-1&&go(PAGES[cur+1].s,1);
 $('btnWall').onclick=()=>openWall();
-function openChs(){let last=null;$('chl').innerHTML=PAGES.map((p,i)=>{let hd='';const g=p.ch?(p.lab||'Главы'):'Книга';if(g!==last&&(VIEWER||i<2||!p.ch)){hd=`<div class="chlh">${esc(g)}</div>`;last=g}return hd+`<button data-go="${p.s}" class="${i===cur?'on':''}"><i>${i+1}</i>${esc(p.t)}${p.ch?`<small>${p.ch.ppl.length} чел.</small>`:''}</button>`}).join('');$('chs').classList.add('on')}
-$('btnCh').onclick=openChs;$('chs').addEventListener('click',e=>{if(e.target.id==='chs')$('chs').classList.remove('on')});
+function openChs(){let last=null;$('chl').innerHTML=`<input id="psrch" type="search" placeholder="Найти человека по имени" autocomplete="off"><div id="psres"></div>`+PAGES.map((p,i)=>{let hd='';const g=p.ch?(p.lab||'Главы'):'Книга';if(g!==last&&(VIEWER||i<2||!p.ch)){hd=`<div class="chlh">${esc(g)}</div>`;last=g}return hd+`<button data-go="${p.s}" class="${i===cur?'on':''}"><i>${i+1}</i>${esc(p.t)}${p.ch?`<small>${p.ch.ppl.length} чел.</small>`:''}</button>`}).join('');$('chs').classList.add('on')}
+$('btnCh').onclick=openChs;
+document.addEventListener('input',e=>{if(e.target.id!=='psrch')return;const q=e.target.value.trim().toLowerCase();const r=$('psres');if(q.length<2){r.innerHTML='';return}
+  const hits=Object.keys(P).filter(id=>(P[id].nm+' '+(P[id].mn||'')+' '+(SHORT[id]||'')).toLowerCase().includes(q)).slice(0,8);
+  r.innerHTML=hits.length?hits.map(id=>`<button data-p="${id}">${av(id,28)}<span>${esc(gp(id))} ${esc(fam(id))}${relv(id)?` <small>${esc(relv(id))}</small>`:''}</span></button>`).join(''):'<div class="psno">Никого не нашли</div>'});$('chs').addEventListener('click',e=>{if(e.target.id==='chs')$('chs').classList.remove('on')});
 addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;
   if(e.key==='Escape'){if($('lb').classList.contains('on'))return closeLb();if($('ov').classList.contains('on'))return closeP();if(!$('wall').classList.contains('hide'))return closeWall();$('chs').classList.remove('on');return}
   if(!$('wall').classList.contains('hide')||$('lb').classList.contains('on'))return;
@@ -1141,8 +1150,8 @@ book.addEventListener('touchend',e=>{if(sx0===null)return;const dx=e.changedTouc
 document.addEventListener('click',e=>{
   const vd=e.target.closest('[data-vid]');if(vd){openLb('video/'+vd.dataset.vid+'.mp4',vd.dataset.cap,1);return}
   const lb=e.target.closest('[data-lb]');if(lb){openLb(lb.dataset.lb,lb.dataset.cap);return}
-  const pp=e.target.closest('[data-p]');if(pp&&!e.target.closest('#world')){const id=pp.dataset.p;const inOv=!!e.target.closest('#ov');if(inOv&&!CHI[OVC].ppl.includes(id))OVC=null;openP(id,inOv?1:0);return}
-  const g=e.target.closest('[data-go]');if(g){e.preventDefault();$('chs').classList.remove('on');if($('ov').classList.contains('on'))closeP();closeWall();go(g.dataset.go);return}
+  const pp=e.target.closest('[data-p]');if(pp&&!e.target.closest('#world')){$('chs').classList.remove('on');const id=pp.dataset.p;const inOv=!!e.target.closest('#ov');if(inOv&&!CHI[OVC].ppl.includes(id))OVC=null;openP(id,inOv?1:0);return}
+  const g=e.target.closest('[data-go]');if(g){e.preventDefault();$('chs').classList.remove('on');if($('ov').classList.contains('on'))closeP(true);closeWall(true);go(g.dataset.go);return}
   if(e.target.closest('[data-wall]')){openWall();return}
   const tb=e.target.closest('[data-tl]');if(tb){tlMode=tb.dataset.tl;store.tl=tlMode;save();render(0);return}
   const fb=e.target.closest('[data-fly]');if(fb){glFly(fb.dataset.fly);return}
@@ -1166,8 +1175,8 @@ function sendStory(){const who=$('fWho').value,by=$('fBy').value.trim(),txt=$('f
 document.addEventListener('input',e=>{if(e.target.id==='fBy'||e.target.id==='fTxt')$('fErr').textContent=''});
 
 /* lightbox */
-function openLb(src,cap,vid){const I=$('lbI'),V=$('lbV');I.classList.toggle('hide',!!vid);V.classList.toggle('hide',!vid);if(vid){V.poster=src.replace('.mp4','.jpg');V.src=src;V.play().catch(()=>{})}else I.src=src;$('lbP').textContent=cap||'';$('lb').classList.add('on')}
-function closeLb(){$('lb').classList.remove('on');const V=$('lbV');V.pause();V.removeAttribute('src');V.load()}
+function openLb(src,cap,vid){if(!$('lb').classList.contains('on'))history.pushState({layer:'lb'},'',location.href);const I=$('lbI'),V=$('lbV');I.classList.toggle('hide',!!vid);V.classList.toggle('hide',!vid);if(vid){V.poster=src.replace('.mp4','.jpg');V.src=src;V.play().catch(()=>{})}else I.src=src;$('lbP').textContent=cap||'';$('lb').classList.add('on')}
+function closeLb(pop){if(!pop&&history.state&&history.state.layer==='lb'){history.back();return}$('lb').classList.remove('on');const V=$('lbV');V.pause();V.removeAttribute('src');V.load()}
 $('lb').addEventListener('click',e=>{if(e.target.id!=='lbI'&&e.target.id!=='lbV')closeLb()});
 
 /* old photos come alive */
@@ -1228,9 +1237,9 @@ function setTab(){const wallOn=!$('wall').classList.contains('hide');const k=PAG
   document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===t&&!(t==='book'&&b.closest('.navd'))))}
 document.addEventListener('click',e=>{
   const t=e.target.closest('[data-tab]');if(t){const k=t.dataset.tab;$('chs').classList.remove('on');
-    if(k==='book'){closeWall();openChs();return}
+    if(k==='book'){closeWall(true);openChs();return}
     if(k==='tree'){if(!$('wall').classList.contains('hide')){closeWall();return}openWall();return}
-    closeWall();go(k);return}
+    closeWall(true);go(k);return}
   const w=e.target.closest('.whoi [data-who]');if(w){setViewer(w.dataset.who);return}
   if(e.target.closest('[data-whomore]')){openWho();return}
   const f=e.target.closest('[data-f]');if(f){FST.push(FID);drawFocus(f.dataset.f);return}
@@ -1250,8 +1259,9 @@ function drawFocus(id){FID=id;const p=P[id];const par=PAR[id]||[];const sp=SPO[i
   $('focus').scrollTop=0}
 function setWM(m){WM=m;wall.classList.toggle('fm',m==='f');$('focus').classList.toggle('hide',m!=='f');document.querySelectorAll('[data-wm]').forEach(b=>b.classList.toggle('on',b.dataset.wm===m));
   if(m==='f'&&!FID)drawFocus(VIEWER||'ole');if(m==='f'&&FID)drawFocus(FID);if(m==='a')requestAnimationFrame(()=>innerWidth<700?center(FID||VIEWER||'ole'):fit())}
-const _ow=openWall;openWall=function(){_ow();setWM(WM||(innerWidth<700?'f':'a'));setTab()};
-const _cw=closeWall;closeWall=function(){_cw();setTab()};
+const _ow=openWall;openWall=function(){if($('wall').classList.contains('hide'))history.pushState({layer:'wall'},'',location.href);_ow();setWM(WM||(innerWidth<700?'f':'a'));setTab()};
+const _cw=closeWall;closeWall=function(pop){if(!pop&&!$('wall').classList.contains('hide')&&history.state&&history.state.layer==='wall'){history.back();return}_cw();setTab()};
+addEventListener('popstate',()=>{if($('lb').classList.contains('on')){closeLb(true);return}if($('ov').classList.contains('on')){closeP(true);return}if(!$('wall').classList.contains('hide')){closeWall(true);return}$('chs').classList.remove('on')});
 /* lightbox list */
 let LBL=[],LBI=0;
 document.addEventListener('click',e=>{const b=e.target.closest('[data-lb]');if(!b)return;const g=b.closest('.gal');LBL=g?[...g.querySelectorAll('[data-lb]')].map(x=>[x.dataset.lb,x.dataset.cap]):[[b.dataset.lb,b.dataset.cap]];LBI=Math.max(0,LBL.findIndex(x=>x[0]===b.dataset.lb));lbUi()},true);
@@ -1270,7 +1280,7 @@ const hk=fromHash(h0);
 if(hk){$('cover').classList.add('hide','up')}
 render(0);if(hk===2)openP(h0.slice(2));
 addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h.startsWith('p-')&&P[h.slice(2)]){if(!$('ov').classList.contains('on')||OVL[OVI]!==h.slice(2)){$('cover').classList.add('hide','up');openP(h.slice(2))}return}
-  if(IDX[h]!==undefined&&IDX[h]!==cur){$('cover').classList.add('hide','up');if($('ov').classList.contains('on'))closeP();closeWall();go(h)}});
+  if(IDX[h]!==undefined&&IDX[h]!==cur){$('cover').classList.add('hide','up');if($('ov').classList.contains('on'))closeP(true);closeWall(true);go(h)}});
 </script>
 </body>
 </html>
