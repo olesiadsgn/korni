@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Кто на фото? · Корни семьи</title>
+<style>
+:root{--bg:#f4f1ec;--ink:#1c1a17;--mut:#6b655c;--acc:#b5543a;--card:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:20px/1.45 Georgia,"Times New Roman",serif}
+.wrap{max-width:760px;margin:0 auto;padding:28px 18px 170px}
+h1{font-size:34px;line-height:1.15;margin:8px 0 12px}
+.lead{font-size:21px;color:#3b372f}
+.who{background:var(--card);border-radius:18px;padding:18px;margin:22px 0}
+label{display:block;font:600 17px/1.3 system-ui,sans-serif;color:var(--mut);margin:14px 0 6px}
+input,textarea{width:100%;font:20px/1.4 Georgia,serif;padding:12px 14px;border:2px solid #d8d1c6;border-radius:12px;background:#fff;color:var(--ink)}
+textarea{min-height:84px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:var(--acc)}
+.ph{background:var(--card);border-radius:18px;padding:14px;margin:26px 0;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.ph img{width:100%;border-radius:10px;display:block;cursor:zoom-in}
+.num{font:700 16px system-ui,sans-serif;color:var(--acc);margin:12px 0 0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ok{display:none;color:#1f8f4e;font:600 16px system-ui,sans-serif;margin-top:8px}
+.ph.done .ok{display:block}
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(244,241,236,.97);border-top:1px solid #ddd5c9;padding:10px 14px 14px;display:flex;flex-wrap:wrap;gap:8px 10px;justify-content:center;align-items:center}
+.cnt{flex-basis:100%;text-align:center}
+.btn{font:700 19px system-ui,sans-serif;border:0;border-radius:14px;padding:16px 22px;background:var(--acc);color:#fff;text-decoration:none;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--ink);border:2px solid #d8d1c6}
+.cnt{font:600 16px system-ui,sans-serif;color:var(--mut)}
+#zoom{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:9}
+#zoom img{max-width:100%;max-height:100%}
+#msg{display:none;font:600 17px system-ui,sans-serif;color:var(--acc);text-align:center;margin-top:10px}
+@media (max-width:520px){.row{grid-template-columns:1fr}h1{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Кто на этих фотографиях?</h1>
+  <p class="lead">Здесь старые семейные фото. Под каждым можно написать, кто на нём, примерно какой год и где снимали. Если не знаете, просто пропустите фото.</p>
+  <p class="lead">Всё, что вы напишете, сохраняется на этом телефоне или компьютере. Можно закрыть страницу и вернуться потом. Когда закончите, нажмите внизу «Отправить Олесе».</p>
+  <div class="who">
+    <label for="by">Кто подписывает</label>
+    <input id="by" placeholder="Например: бабушка Зоя">
+  </div>
+  <div id="list"></div>
+</div>
+<div class="bar">
+  <span class="cnt" id="cnt"></span>
+  <a class="btn" id="send" href="#" target="_blank" rel="noopener">Отправить Олесе</a>
+  <button class="btn ghost" id="copy">Скопировать</button>
+</div>
+<div id="zoom"><img alt=""></div>
+<script>
+const N=28,KEY='korni-podpisi';
+let S={};try{S=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const pad=n=>String(n).padStart(2,'0');
+const L=document.getElementById('list');
+for(let i=1;i<=N;i++){
+  const id=pad(i),v=S[id]||{};
+  const d=document.createElement('div');d.className='ph';d.id='p'+id;
+  d.innerHTML=`<img src="${id}.jpg" alt="Фото ${i}" loading="lazy">
+  <div class="num">Фото ${i} из ${N}</div>
+  <label>Кто на фото</label><textarea data-k="who" placeholder="Имена, слева направо"></textarea>
+  <div class="row"><div><label>Примерно какой год</label><input data-k="year" placeholder="Например: 1965"></div>
+  <div><label>Где</label><input data-k="where" placeholder="Город, село, дача"></div></div>
+  <label>Что ещё помните</label><textarea data-k="note" placeholder="Можно не заполнять"></textarea>
+  <div class="ok">Сохранено ✓</div>`;
+  d.querySelectorAll('[data-k]').forEach(el=>{el.value=v[el.dataset.k]||'';el.addEventListener('input',()=>{S[id]=S[id]||{};S[id][el.dataset.k]=el.value;save();mark(d,id);count()})});
+  d.querySelector('img').onclick=e=>{const z=document.getElementById('zoom');z.querySelector('img').src=e.target.src;z.style.display='flex'};
+  L.appendChild(d);mark(d,id);
+}
+document.getElementById('zoom').onclick=function(){this.style.display='none'};
+const by=document.getElementById('by');by.value=S._by||'';by.addEventListener('input',()=>{S._by=by.value;save()});
+function filled(id){const v=S[id]||{};return ['who','year','where','note'].some(k=>(v[k]||'').trim())}
+function mark(d,id){d.classList.toggle('done',filled(id))}
+function count(){let c=0;for(let i=1;i<=N;i++)if(filled(pad(i)))c++;document.getElementById('cnt').textContent=`Подписано: ${c} из ${N}`}
+count();
+function text(){
+  let t='Подписи к старым фото для семейной книги\nПодписывает: '+((S._by||'').trim()||'не указано')+'\n';
+  for(let i=1;i<=N;i++){const id=pad(i);if(!filled(id))continue;const v=S[id];
+    t+=`\nФото ${i}:`;if((v.who||'').trim())t+=`\nКто: ${v.who.trim()}`;if((v.year||'').trim())t+=`\nГод: ${v.year.trim()}`;if((v.where||'').trim())t+=`\nГде: ${v.where.trim()}`;if((v.note||'').trim())t+=`\nЕщё: ${v.note.trim()}`;t+='\n'}
+  return t}
+document.getElementById('send').addEventListener('click',e=>{
+  if(!Object.keys(S).some(k=>k!=='_by'&&filled(k))){e.preventDefault();alertMsg('Сначала подпишите хотя бы одно фото');return}
+  e.currentTarget.href='https://t.me/share/url?url='+encodeURIComponent('https://olesiadsgn.github.io/korni/podpisi/')+'&text='+encodeURIComponent(text());
+});
+document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(text());alertMsg('Скопировано. Вставьте в сообщение Олесе.')}catch(e){alertMsg('Не получилось скопировать')}};
+function alertMsg(m){document.getElementById('cnt').textContent=m;setTimeout(count,3500)}
+</script>
+</body>
+</html>
