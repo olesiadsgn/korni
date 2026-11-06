@@ -1,0 +1,350 @@
+// ===== Config.js =====
+/* Семейный бот «Корни семьи» (@korni_semyi_bot), Google Apps Script.
+   Раз в минуту забирает сообщения из Телеграма, фото и голосовые кладёт на Диск
+   в «Корни семьи / Присланное родными», пишет строку в «Журнал присланного»
+   и шлёт Олесе письмо о новом. Токен лежит в свойствах скрипта (TG_TOKEN), в коде его нет.
+
+   Файлы: Config (настройки и тексты), Store (память бота), Telegram (запросы к API),
+   Inbox (Диск, журнал, письма), Handlers (что отвечать), Birthdays (напоминания),
+   Facts (факты), Data (люди и вопросы, генерируется из книги). */
+
+var CFG = {
+  ADMIN_USER: 'arkharovaoa',
+  SITE: 'https://olesiadsgn.github.io/korni/',
+  INBOX_FOLDER: '1sIhxCUTbo215rnaKbsyPyi38qC1H-rb3',
+  JOURNAL: '11m7wSpq3DliF8aE_201cMUdjL11E2VB8Vo9GAVyYMSU',
+  TZ: 'Europe/Moscow',
+  MAX_FILE: 20e6,          // Телеграм отдаёт ботам файлы до 20 МБ
+  THANKS_EVERY: 120000     // «спасибо» не чаще раза в 2 минуты, чтобы альбом не засыпал чат
+};
+CFG.PHOTO = CFG.SITE + 'photos/family-2025.jpg';
+
+var BTN = {
+  PHOTO: '📷 Прислать фото', STORY: '🎙 Рассказать историю', Q: '❓ Ответить на вопрос',
+  FIX: '✏️ Есть неточность', FACT: '💡 А вы знали?', BOOK: '📖 Открыть книгу'
+};
+var KB = {keyboard: [[BTN.PHOTO, BTN.STORY], [BTN.Q, BTN.FIX], [BTN.FACT, BTN.BOOK]], resize_keyboard: true, is_persistent: true};
+var MONTHS = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+
+var TXT = {
+  desc: 'Это семейный бот книги «Корни семьи». Дедушка Алексей Дмитриевич Кузьменко много лет собирал нашу родословную, а Олеся продолжает его дело. Сюда родные присылают старые фото, истории и голосовые, и всё это попадает в книгу.\n\nБот только для своих. Нажмите «Старт», и Олеся вас добавит.',
+  short: 'Семейная книга Кузьменко, Петровых и Ивановых. Присылайте фото и истории.',
+  intro: 'Привет! Это бот нашей семейной книги «Корни семьи».\n\nДедушка Алексей Дмитриевич много лет собирал нашу родословную: имена, даты, сёла, фото. Олеся продолжила его дело, и получилась целая книга про нас.\n\nСюда можно присылать старые фото, рассказывать истории голосом и поправлять, если в книге что-то не так. Олеся всё посмотрит и добавит.\n\nКнопки внизу подскажут, что можно сделать. А ещё я напомню, когда у кого-то из родных день рождения.',
+  adminHi: 'Привет, Олеся! Ты админ. Когда кто-то новый нажмёт «Старт», я пришлю тебе кнопки «Пустить» и «Отклонить».',
+  wait: 'Привет! Это семейный бот книги «Корни семьи». Олеся скоро тебя добавит, и тогда можно будет присылать фото.',
+  added: 'Олеся тебя добавила!',
+  photo: 'Отправьте фото, как обычно в Телеграме. Можно сразу несколько.\n\nИ подпишите, если помните: кто на фото, где и примерно какой год. Можно рассказать голосом.',
+  story: 'Нажмите на микрофон и расскажите. О ком история, что случилось, примерно когда.\n\nМожно долго и несколькими голосовыми подряд. Можно и текстом.',
+  fix: 'Напишите или скажите голосом, что в книге не так. Например: «У бабушки Тони неправильная дата» или «На фото не Таня, а Света».\n\nМожно прислать скриншот страницы.',
+  book: 'Вот наша книга. На первой странице нажмите на себя, и везде будет подписано, кто вам кто.',
+  muteOn: 'Хорошо, больше не буду присылать напоминания о днях рождения. Включить снова: /birthdays',
+  muteOff: 'Напоминания о днях рождения снова включены.',
+  thanks: 'Спасибо, всё получено! Олеся посмотрит и добавит в книгу.',
+  thanksFix: 'Спасибо, что заметили! Олеся поправит.',
+  tooBig: 'Видео слишком большое для бота (больше 20 МБ). Пришлите, пожалуйста, покороче или напишите Олесе.'
+};
+
+// ===== Store.js =====
+/* Память бота в свойствах скрипта.
+   state: offset Телеграма, id админа, кто ждёт допуска, режим каждого человека, когда благодарили, кто выключил напоминания.
+   allow: кому можно писать боту. */
+
+function props() { return PropertiesService.getScriptProperties(); }
+function getJ(k, d) { var v = props().getProperty(k); return v ? JSON.parse(v) : d; }
+function setJ(k, v) { props().setProperty(k, JSON.stringify(v)); }
+
+function loadState() {
+  var st = getJ('state', {});
+  ['pending', 'mode', 'last'].forEach(function (k) { st[k] = st[k] || {}; });
+  st.mute = st.mute || []; st.offset = st.offset || 0;
+  return st;
+}
+function loadAllow() { return getJ('allow', {}); }
+
+// ===== Telegram.js =====
+/* Запросы к Telegram Bot API. */
+
+function token() {
+  var t = props().getProperty('TG_TOKEN');
+  if (!t) throw new Error('Нет TG_TOKEN в свойствах скрипта');
+  return t;
+}
+
+function tg(method, params) {
+  var r = UrlFetchApp.fetch('https://api.telegram.org/bot' + token() + '/' + method, {
+    method: 'post', contentType: 'application/json', payload: JSON.stringify(params || {}), muteHttpExceptions: true});
+  var j = JSON.parse(r.getContentText());
+  if (!j.ok) throw new Error(method + ': ' + r.getContentText());
+  return j.result;
+}
+
+/* Отправить текст. Ошибку только записываем: один упавший ответ не должен ронять весь разбор. */
+function say(chat, text, extra) {
+  var p = {chat_id: chat, text: text};
+  for (var k in (extra || {})) p[k] = extra[k];
+  try { return tg('sendMessage', p); } catch (e) { console.log(e); }
+}
+function sayKb(chat, text) { return say(chat, text, {reply_markup: KB}); }
+
+function who(u) {
+  return [u.first_name, u.last_name].filter(Boolean).join(' ') + (u.username ? ' (@' + u.username + ')' : '');
+}
+
+function downloadFile(fileId, name) {
+  var f = tg('getFile', {file_id: fileId});
+  return UrlFetchApp.fetch('https://api.telegram.org/file/bot' + token() + '/' + f.file_path).getBlob().setName(name);
+}
+
+// ===== Inbox.js =====
+/* Куда складывается присланное: папка по месяцам на Диске, строка в журнале, письмо Олесе. */
+
+function monthFolder(d) {
+  var root = DriveApp.getFolderById(CFG.INBOX_FOLDER), name = Utilities.formatDate(d, CFG.TZ, 'yyyy-MM');
+  var it = root.getFoldersByName(name);
+  return it.hasNext() ? it.next() : root.createFolder(name);
+}
+function saveFile(fileId, name, d) { return monthFolder(d).createFile(downloadFile(fileId, name)); }
+
+/* Колонки журнала: дата, кто, файл, подпись, (пусто), о ком, (пусто), (пусто), статус, заметка */
+function journal(row) { SpreadsheetApp.openById(CFG.JOURNAL).getSheets()[0].appendRow(row); }
+
+function notify(news) {
+  var to = props().getProperty('NOTIFY_EMAIL') || Session.getEffectiveUser().getEmail();
+  MailApp.sendEmail(to, 'Корни семьи: новое от родных (' + news.length + ')',
+    'В семейный бот пришло новое:\n\n' + news.map(function (x) { return '• ' + x; }).join('\n') +
+    '\n\nФайлы: https://drive.google.com/drive/folders/' + CFG.INBOX_FOLDER +
+    '\nЖурнал: https://docs.google.com/spreadsheets/d/' + CFG.JOURNAL +
+    '\n\nВечером Claude разберёт всё и пришлёт, что добавить в книгу.');
+}
+
+/* Сохранить одно сообщение родственника. Возвращает строку для письма или null. */
+function saveMessage(m, uid, name, md) {
+  var d = new Date(m.date * 1000), text = (m.text || '').trim();
+  var base = Utilities.formatDate(d, CFG.TZ, 'yyyy-MM-dd_HHmmss') + '_' + (name || uid).split(' ')[0] + (md.person ? '_' + md.person : '') + '_' + m.message_id;  // номер сообщения, чтобы фото из альбома не путались
+  var file = null, kind = 'текст', note = '';
+  try {
+    if (m.photo) { file = saveFile(m.photo[m.photo.length - 1].file_id, base + '.jpg', d); kind = 'фото'; }
+    else if (m.document) {
+      if ((m.document.file_size || 0) > CFG.MAX_FILE) note = 'Файл больше 20 МБ, бот не может его скачать';
+      else { file = saveFile(m.document.file_id, base + '_' + (m.document.file_name || 'file'), d); kind = 'файл'; }
+    }
+    else if (m.voice || m.audio) { file = saveFile((m.voice || m.audio).file_id, base + '.ogg', d); kind = 'голосовое'; }
+    else if (m.video || m.video_note) {
+      var v = m.video || m.video_note;
+      if ((v.file_size || 0) > CFG.MAX_FILE) { note = 'Видео больше 20 МБ'; say(uid, TXT.tooBig); }
+      else { file = saveFile(v.file_id, base + '.mp4', d); kind = 'видео'; }
+    }
+    else if (!text) return null;   // стикеры и прочее не сохраняем
+  } catch (e) { note = 'Не скачалось: ' + e; }
+
+  var typeName = {photo: 'фото', story: 'рассказ', fix: 'неточность', answer: 'ответ на вопрос'}[md.kind] || '';
+  var caption = (typeName ? '[' + typeName + (md.question ? ': ' + md.question : '') + '] ' : '') +
+    (m.caption || text || '') + (note ? ' (' + note + ')' : '');
+  journal([Utilities.formatDate(d, CFG.TZ, 'yyyy-MM-dd HH:mm'), name, file ? file.getUrl() : '', caption, '', md.about || '', '', '', 'новое', '']);
+  return name + ': ' + kind + (typeName ? ' (' + typeName + ')' : '') + (caption ? ' ' + caption.slice(0, 200) : '');
+}
+
+// ===== Handlers.js =====
+/* Главный цикл и ответы бота. */
+
+/* Запускается триггером каждую минуту. */
+function poll() {
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(5000)) return;
+  try {
+    var st = loadState(), allow = loadAllow(), news = [];
+    var upd = tg('getUpdates', {offset: st.offset, timeout: 0, allowed_updates: ['message', 'callback_query']});
+    upd.forEach(function (u) {
+      st.offset = u.update_id + 1;
+      try { handle(u, st, allow, news); } catch (e) { console.log('update fail', e); }
+    });
+    setJ('state', st); setJ('allow', allow);
+    if (news.length) notify(news);
+  } finally { lock.releaseLock(); }
+}
+
+function handle(u, st, allow, news) {
+  if (u.callback_query) return onDecision(u.callback_query, st, allow);
+  var m = u.message;
+  if (!m || m.chat.type !== 'private') return;
+  var frm = m.from, uid = String(frm.id), text = (m.text || '').trim();
+
+  if (claimAdmin(frm, uid, st, allow) && text.indexOf('/start') === 0) return;
+  if (!allow[uid]) return askToJoin(frm, uid, st);
+  if (onDeepLink(text, uid, st)) return;
+  if (onCommand(text, uid, st)) return;
+
+  var line = saveMessage(m, uid, allow[uid].name, st.mode[uid] || {});
+  if (!line) return;
+  news.push(line);
+  var now = Date.now();
+  if (now - (st.last[uid] || 0) > CFG.THANKS_EVERY) sayKb(uid, (st.mode[uid] || {}).kind === 'fix' ? TXT.thanksFix : TXT.thanks);
+  st.last[uid] = now;
+}
+
+/* Олеся нажала «Пустить» или «Отклонить». */
+function onDecision(q, st, allow) {
+  if (String(q.from.id) !== String(st.admin)) return;
+  var parts = q.data.split(':'), target = parts[1], p = st.pending[target];
+  delete st.pending[target];
+  var name = p ? p.name : target, txt;
+  if (parts[0] === 'ok') { allow[target] = {name: name}; say(target, TXT.added); welcome(target); txt = 'Пустила: ' + name; }
+  else txt = 'Отклонила: ' + name;
+  try {
+    tg('answerCallbackQuery', {callback_query_id: q.id, text: txt});
+    tg('editMessageText', {chat_id: q.message.chat.id, message_id: q.message.message_id, text: txt});
+  } catch (e) {}
+}
+
+/* Админа узнаём по нику. Возвращает true, если только что назначили. */
+function claimAdmin(frm, uid, st, allow) {
+  if ((frm.username || '').toLowerCase() !== CFG.ADMIN_USER || String(st.admin) === uid) return false;
+  st.admin = uid; allow[uid] = {name: who(frm), admin: true};
+  say(uid, TXT.adminHi); welcome(uid);
+  return true;
+}
+
+function askToJoin(frm, uid, st) {
+  if (st.pending[uid]) return;
+  st.pending[uid] = {name: who(frm)};
+  say(uid, TXT.wait);
+  if (st.admin) say(st.admin, 'Хочет войти: ' + who(frm) + '\nid ' + uid,
+    {reply_markup: {inline_keyboard: [[{text: 'Пустить', callback_data: 'ok:' + uid}, {text: 'Отклонить', callback_data: 'no:' + uid}]]}});
+}
+
+/* Кнопки «Рассказать» с сайта: ?start=a_<id>_<номер вопроса> и ?start=s_<id>. */
+function onDeepLink(text, uid, st) {
+  if (text.indexOf('/start ') !== 0) return false;
+  var payload = text.slice(7).trim();
+  if (payload.indexOf('a_') === 0) {
+    var rest = payload.slice(2), cut = rest.lastIndexOf('_'), pid = rest.slice(0, cut), idx = rest.slice(cut + 1);
+    var q = QUESTIONS.filter(function (x) { return x.id === pid && String(x.i) === idx; })[0];
+    if (q) { askQuestion(uid, st, q, 'О ком: ' + q.who + '\nВопрос: ' + q.q + '\n\nРасскажите, что знаете. Можно текстом или голосовым, можно несколькими сообщениями.'); return true; }
+  }
+  if (payload.indexOf('s_') === 0 && PEOPLE[payload.slice(2)]) {
+    var pid2 = payload.slice(2);
+    st.mode[uid] = {kind: 'story', about: PEOPLE[pid2].full, person: pid2};
+    sayKb(uid, 'История о человеке: ' + PEOPLE[pid2].full + '.\n\nЕсли вы написали текст на сайте, он уже скопирован: просто вставьте его сюда и отправьте. Или расскажите голосом.');
+    return true;
+  }
+  return false;
+}
+
+function onCommand(text, uid, st) {
+  if (text.indexOf('/start') === 0 || text === '/help') { welcome(uid); return true; }
+  if (text === '/birthdays') { toggleMute(uid, st); return true; }
+  if (text === '/fact' || text === BTN.FACT) { sayKb(uid, fact()); return true; }
+  if (text === BTN.BOOK) { say(uid, TXT.book, {reply_markup: {inline_keyboard: [[{text: 'Открыть книгу', url: CFG.SITE}]]}}); return true; }
+  if (text === BTN.PHOTO) { st.mode[uid] = {kind: 'photo'}; sayKb(uid, TXT.photo); return true; }
+  if (text === BTN.STORY) { st.mode[uid] = {kind: 'story'}; sayKb(uid, TXT.story); return true; }
+  if (text === BTN.FIX) { st.mode[uid] = {kind: 'fix'}; sayKb(uid, TXT.fix); return true; }
+  if (text === BTN.Q) {
+    var q = QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)];
+    askQuestion(uid, st, q, 'Вот что мы пока не знаем.\n\nО ком: ' + q.who + '\nВопрос: ' + q.q + '\n\nЕсли знаете, ответьте текстом или голосовым. Если нет, нажмите «Ответить на вопрос» ещё раз, будет другой вопрос.');
+    return true;
+  }
+  return false;
+}
+
+function askQuestion(uid, st, q, text) {
+  st.mode[uid] = {kind: 'answer', about: q.who, question: q.q, person: q.id};
+  sayKb(uid, text);
+}
+
+function toggleMute(uid, st) {
+  var i = st.mute.indexOf(uid);
+  if (i >= 0) { st.mute.splice(i, 1); sayKb(uid, TXT.muteOff); }
+  else { st.mute.push(uid); sayKb(uid, TXT.muteOn); }
+}
+
+function fact() { return 'А вы знали?\n\n' + FACTS[Math.floor(Math.random() * FACTS.length)]; }
+
+function welcome(chat) {
+  try { tg('sendPhoto', {chat_id: chat, photo: CFG.PHOTO, caption: TXT.intro, reply_markup: KB}); }
+  catch (e) { sayKb(chat, TXT.intro); }
+  sayKb(chat, fact());
+}
+
+/* Запустить один раз вручную: включает расписание и описание бота. */
+function setup() {
+  token();
+  ScriptApp.getProjectTriggers().forEach(function (t) { ScriptApp.deleteTrigger(t); });
+  ScriptApp.newTrigger('poll').timeBased().everyMinutes(1).create();
+  ScriptApp.newTrigger('birthdays').timeBased().atHour(9).everyDays(1).inTimezone(CFG.TZ).create();
+  try { tg('deleteWebhook', {}); } catch (e) {}
+  tg('setMyDescription', {description: TXT.desc});
+  tg('setMyShortDescription', {short_description: TXT.short});
+  tg('setMyCommands', {commands: [
+    {command: 'start', description: 'Начать сначала'},
+    {command: 'fact', description: 'Интересный факт о семье'},
+    {command: 'birthdays', description: 'Вкл/выкл напоминания о днях рождения'}]});
+  console.log('Готово. Бот проверяет сообщения каждую минуту.');
+}
+
+/* Проверка без Телеграма: запустить в редакторе, смотреть журнал выполнения. */
+function selfTest() {
+  console.log('людей', Object.keys(PEOPLE).length, 'вопросов', QUESTIONS.length, 'дат', BIRTHS.length, 'фактов', FACTS.length);
+  console.log('токен есть:', !!props().getProperty('TG_TOKEN'));
+  console.log('бот:', tg('getMe', {}).username);
+  console.log('папка:', DriveApp.getFolderById(CFG.INBOX_FOLDER).getName(), '| журнал:', SpreadsheetApp.openById(CFG.JOURNAL).getName());
+  console.log('сегодня памятные даты:', todaysBirthdays().length);
+}
+
+// ===== Birthdays.js =====
+/* Дни рождения живых и тихие дни памяти старших. Запускается триггером в 9:00 по Москве. */
+
+function years(n) {
+  var a = n % 10, b = n % 100;
+  return n + ' ' + (a === 1 && b !== 11 ? 'год' : (a >= 2 && a <= 4 && (b < 10 || b >= 20)) ? 'года' : 'лет');
+}
+
+function todaysBirthdays(now) {
+  now = now || new Date();
+  var dm = Utilities.formatDate(now, CFG.TZ, 'dd.MM'), y = +Utilities.formatDate(now, CFG.TZ, 'yyyy');
+  var day = +dm.slice(0, 2), mon = +dm.slice(3) - 1;
+  return BIRTHS.filter(function (b) { return b.dm === dm; }).map(function (b) {
+    if (b.memory) return '📖 В этот день, ' + day + ' ' + MONTHS[mon] + ' ' + b.y + ' года, ' +
+      (b.g === 'f' ? 'родилась ' : 'родился ') + b.full + '.' + (b.note ? ' ' + b.note : '') +
+      '\n\nИстория в книге: ' + CFG.SITE + '#p-' + b.id;
+    return '🎂 Сегодня день рождения! ' + b.full + ', ' + b.short + '. Исполняется ' + years(y - b.y) + '.\n\nНе забудьте поздравить!';
+  });
+}
+
+function birthdays() {
+  var msgs = todaysBirthdays();
+  if (!msgs.length) return;
+  var st = loadState(), allow = loadAllow();
+  Object.keys(allow).forEach(function (uid) {
+    if (st.mute.indexOf(uid) >= 0) return;
+    msgs.forEach(function (t) { say(uid, t); });
+  });
+}
+
+// ===== Facts.js =====
+/* Факты для кнопки «А вы знали?». Пишем коротко, только то, что есть в книге. */
+var FACTS = [
+  'Прадедушка Дмитрий Алексеевич Кузьменко был военным фельдшером. В армии он прослужил 16 лет, с 1940 по 1956 год, и прошёл войну. Закончил службу старшим лейтенантом медицинской службы.',
+  'Когда Дмитрий Алексеевич ушёл с военной службы, в 36 лет он поступил в институт и в 1961 году стал инженером-электриком.',
+  'Боромлю, откуда родом Кузьменко, основал атаман Корней Васильев с 425 казаками. Грамоту на это дал царь Алексей Михайлович в 1658 году.',
+  'Боромля славится клубникой. Клубничные выставки там проводят каждый год с 1908 года.',
+  'Мария Васильевна Петрова в войну была совсем девчонкой и работала на тракторах.',
+  'Владимир Иванович Петров вернулся с войны с орденом Красной Звезды и медалью «За отвагу». А в 1985 году его наградили орденом Отечественной войны I степени.',
+  'Родная фамилия Владимира Ивановича Мамот. Так звали его маму Александру Пантелеевну, брата Анатолия и сестёр. Петровым он стал позже.',
+  'Алексей Дмитриевич и Зоя Владимировна поженились 15 октября. Через много лет, 15 октября 2004 года, поженились Юлия и Александр.',
+  'В 1979 году Алексей Дмитриевич получил звание «Донор СССР» первой степени, а в 1987-м «Лучший по профессии».',
+  'На заводе СЭПО работали и Алексей Дмитриевич, и Зоя Владимировна. В 1951 году СЭПО вместе с ЗиЛом первым в стране начал выпускать бытовые холодильники.',
+  'У Александра Петровича два дня рождения. Празднуют его 7 сентября, а в документах записано 9-е. Даже в дедушкином списке дней рождения стоит 7 сентября.',
+  'Фамилия Ваккер похожа на немецкую Wacker. Это значит «бодрый, храбрый».',
+  'В 1952 году Анатолий Иванович прислал брату фото из Монино. На обороте он написал: «Вспоминайте не тогда, когда смотрите, а смотрите тогда, когда вспоминаете».',
+  'Алексей Дмитриевич оцифровал семейные видеокассеты. Самые старые видео в книге сняты в 1998 году.',
+  'Женя окончила Саратовское художественное училище имени Боголюбова. Его открыли ещё в 1897 году.',
+  'Владимир Иванович однажды дошёл до областного суда из-за 1620 рублей за горячую воду. Деньги были не главное, он доказывал, что расчёт был неправильный.',
+  'Алексей Дмитриевич и Зоя Владимировна вместе с восемнадцати лет. Пока он служил в армии, они писали друг другу письма, и эти письма сохранились.',
+  'Первая работа у Юлии случилась в шестнадцать: в 1991 году она училась на продавца в саратовском «Дзинтарсе».'
+];
+
+// ===== Data.js =====
+// Сгенерировано tools/build-bot-data.js из книги. Руками не править.
+var PEOPLE = {"aln":{"full":"Алексей Никифорович Кузьменко","g":"m"},"ivv":{"full":"Иван Ваккер","g":"m"},"zhe":{"full":"Елизавета Семёновна Журавлева","g":"f"},"dmi":{"full":"Дмитрий Алексеевич Кузьменко","g":"m"},"olg":{"full":"Ольга Ивановна Кузьменко","g":"f"},"vas":{"full":"Василий Алексеевич Кузьменко","g":"m"},"ivp":{"full":"Иван Мамот","g":"m"},"ama":{"full":"Александра Пантелеевна Мамот","g":"f"},"ana":{"full":"Анатолий Иванович Мамот","g":"m"},"vla":{"full":"Владимир Иванович Петров","g":"m"},"mar":{"full":"Мария Васильевна Петрова","g":"f"},"vvp":{"full":"Владимир Владимирович Петров","g":"m"},"svp":{"full":"Светлана Петрова","g":"f"},"kvp":{"full":"Константин Владимирович Петров","g":"m"},"olgi":{"full":"Ильинична Ольга","g":"f"},"pav":{"full":"Павел Васильевич Кузьменко","g":"m"},"vad":{"full":"Вадим Дмитриевич Кузьменко","g":"m"},"ale":{"full":"Алексей Дмитриевич Кузьменко","g":"m"},"zoy":{"full":"Зоя Владимировна Кузьменко","g":"f"},"pet":{"full":"Пётр Иванов","g":"m"},"ant":{"full":"Антонина Иванова","g":"f"},"yul":{"full":"Юлия Алексеевна Капитонова","g":"f"},"dar":{"full":"Дарья Алексеевна Кузьменко","g":"f"},"tat":{"full":"Татьяна Петровна Мухина","g":"f"},"kol":{"full":"Николай Мухин","g":"m"},"sve":{"full":"Светлана Николаевна Мухина","g":"f"},"ivn":{"full":"Иван Николаевич Мухин","g":"m"},"iva":{"full":"Александр Петрович Иванов","g":"m"},"ole":{"full":"Олеся Александровна Архарова","g":"f"},"alx":{"full":"Алексей Сергеевич Архаров","g":"m"},"zhen":{"full":"Евгения Александровна Иванова","g":"f"},"mis":{"full":"Михаил Александрович Иванов","g":"m"},"kos":{"full":"Константин Юрьевич Кузьменко","g":"m"}};
+var QUESTIONS = [{"id":"aln","i":0,"who":"Алексей Никифорович Кузьменко","q":"Как звали его жену, маму Дмитрия?"},{"id":"aln","i":1,"who":"Алексей Никифорович Кузьменко","q":"Чем он занимался?"},{"id":"ivv","i":0,"who":"Иван Ваккер","q":"Откуда он был родом?"},{"id":"ivv","i":1,"who":"Иван Ваккер","q":"Кем работал?"},{"id":"zhe","i":0,"who":"Елизавета Семёновна Журавлева","q":"Где и когда родилась?"},{"id":"zhe","i":1,"who":"Елизавета Семёновна Журавлева","q":"Воевала ли она?"},{"id":"dmi","i":0,"who":"Дмитрий Алексеевич Кузьменко","q":"Каким он был по характеру?"},{"id":"dmi","i":1,"who":"Дмитрий Алексеевич Кузьменко","q":"Где работал инженером-электриком?"},{"id":"dmi","i":2,"who":"Дмитрий Алексеевич Кузьменко","q":"Что рассказывал о войне?"},{"id":"dmi","i":3,"who":"Дмитрий Алексеевич Кузьменко","q":"Кто такая Елена Семёновна (1925–1980), похороненная рядом?"},{"id":"olg","i":0,"who":"Ольга Ивановна Кузьменко","q":"Где и когда она родилась?"},{"id":"olg","i":1,"who":"Ольга Ивановна Кузьменко","q":"Как познакомилась с Дмитрием?"},{"id":"olg","i":2,"who":"Ольга Ивановна Кузьменко","q":"Каким человеком была?"},{"id":"ivp","i":0,"who":"Иван Мамот","q":"Годы жизни и откуда родом?"},{"id":"ivp","i":1,"who":"Иван Мамот","q":"Кем работал?"},{"id":"ama","i":0,"who":"Александра Пантелеевна Мамот","q":"Откуда она родом?"},{"id":"ama","i":1,"who":"Александра Пантелеевна Мамот","q":"Какой её помнят?"},{"id":"ana","i":0,"who":"Анатолий Иванович Мамот","q":"Старше он был или младше Владимира?"},{"id":"ana","i":1,"who":"Анатолий Иванович Мамот","q":"Почему жил в Монино? Служил там?"},{"id":"ana","i":2,"who":"Анатолий Иванович Мамот","q":"Есть ли у него дети и внуки?"},{"id":"vla","i":0,"who":"Владимир Иванович Петров","q":"Когда и почему он сменил фамилию Мамот на Петров?"},{"id":"vla","i":1,"who":"Владимир Иванович Петров","q":"Где хранятся его награды и удостоверения к ним?"},{"id":"vla","i":2,"who":"Владимир Иванович Петров","q":"Как он познакомился с Марией?"},{"id":"mar","i":0,"who":"Мария Васильевна Петрова","q":"Что она рассказывала про войну?"},{"id":"mar","i":1,"who":"Мария Васильевна Петрова","q":"Как познакомилась с Владимиром?"},{"id":"mar","i":2,"who":"Мария Васильевна Петрова","q":"Какой была бабушкой?"},{"id":"vvp","i":0,"who":"Владимир Владимирович Петров","q":"Где он живёт сейчас?"},{"id":"vvp","i":1,"who":"Владимир Владимирович Петров","q":"Каким был в детстве?"},{"id":"olgi","i":0,"who":"Ильинична Ольга","q":"Её фамилия и годы жизни?"},{"id":"olgi","i":1,"who":"Ильинична Ольга","q":"Откуда родом?"},{"id":"ale","i":0,"who":"Алексей Дмитриевич Кузьменко","q":"Где служил в армии? На фото он в форме, ему 18."},{"id":"ale","i":1,"who":"Алексей Дмитриевич Кузьменко","q":"Может, кто-то помнит его любимые шутки и анекдоты?"},{"id":"ale","i":2,"who":"Алексей Дмитриевич Кузьменко","q":"Его любимые словечки и песни?"},{"id":"ale","i":3,"who":"Алексей Дмитриевич Кузьменко","q":"Какие истории рассказывал про работу на СЭПО?"},{"id":"zoy","i":0,"who":"Зоя Владимировна Кузьменко","q":"Детство в Святославке?"},{"id":"zoy","i":1,"who":"Зоя Владимировна Кузьменко","q":"В каком году поженились с Алексеем?"},{"id":"zoy","i":2,"who":"Зоя Владимировна Кузьменко","q":"Как познакомилась с Алексеем?"},{"id":"zoy","i":3,"who":"Зоя Владимировна Кузьменко","q":"Можно ли сфотографировать армейские письма?"},{"id":"pet","i":0,"who":"Пётр Иванов","q":"Отчество и годы жизни?"},{"id":"pet","i":1,"who":"Пётр Иванов","q":"Откуда родом, кем работал?"},{"id":"pet","i":2,"who":"Пётр Иванов","q":"Есть ли его фотографии?"},{"id":"ant","i":0,"who":"Антонина Иванова","q":"Отчество и точная дата рождения?"},{"id":"ant","i":1,"who":"Антонина Иванова","q":"Кем работала?"},{"id":"yul","i":0,"who":"Юлия Алексеевна Капитонова","q":"Какие истории про детство с родителями?"},{"id":"tat","i":0,"who":"Татьяна Петровна Мухина","q":"Точная дата рождения?"},{"id":"tat","i":1,"who":"Татьяна Петровна Мухина","q":"Где училась и кем работает?"},{"id":"tat","i":2,"who":"Татьяна Петровна Мухина","q":"Какие истории она помнит про Никитовку и родителей?"},{"id":"kol","i":0,"who":"Николай Мухин","q":"Отчество и откуда родом?"},{"id":"sve","i":0,"who":"Светлана Николаевна Мухина","q":"Год рождения и чем занимается?"},{"id":"sve","i":1,"who":"Светлана Николаевна Мухина","q":"Фамилия по мужу, если вышла замуж?"},{"id":"ivn","i":0,"who":"Иван Николаевич Мухин","q":"Год рождения и чем занимается?"},{"id":"iva","i":0,"who":"Александр Петрович Иванов","q":"Какие истории из армии рассказывает?"},{"id":"zhen","i":0,"who":"Евгения Александровна Иванова","q":"Какая художественная школа?"},{"id":"zhen","i":1,"who":"Евгения Александровна Иванова","q":"Её любимые работы? Можно добавить их фото!"}];
+var BIRTHS = [{"id":"dmi","dm":"08.11","y":1920,"full":"Дмитрий Алексеевич Кузьменко","short":"Дмитрий","memory":true,"g":"m","note":"Военный врач, ветеран войны."},{"id":"ama","dm":"25.03","y":1903,"full":"Александра Пантелеевна Мамот","short":"Александра","memory":true,"g":"f","note":"Мама Владимира Ивановича, бабушка Зои Владимировны по отцу."},{"id":"mar","dm":"19.12","y":1926,"full":"Мария Васильевна Петрова","short":"Мария","memory":true,"g":"f","note":"Жена Владимира Петрова."},{"id":"vvp","dm":"28.11","y":1947,"full":"Владимир Владимирович Петров","short":"Владимир","memory":false,"g":"m","note":""},{"id":"svp","dm":"25.12","y":1953,"full":"Светлана Петрова","short":"Светлана","memory":false,"g":"f","note":""},{"id":"pav","dm":"11.07","y":1952,"full":"Павел Васильевич Кузьменко","short":"Павел","memory":false,"g":"m","note":""},{"id":"vad","dm":"30.09","y":1948,"full":"Вадим Дмитриевич Кузьменко","short":"Вадим","memory":true,"g":"m","note":"Сын Дмитрия и Ольги."},{"id":"ale","dm":"29.07","y":1953,"full":"Алексей Дмитриевич Кузьменко","short":"Алексей","memory":true,"g":"m","note":"Это он начал собирать нашу семейную книгу."},{"id":"zoy","dm":"01.02","y":1953,"full":"Зоя Владимировна Кузьменко","short":"Зоя","memory":false,"g":"f","note":""},{"id":"yul","dm":"30.01","y":1975,"full":"Юлия Алексеевна Капитонова","short":"Юля","memory":false,"g":"f","note":""},{"id":"dar","dm":"13.10","y":1984,"full":"Дарья Алексеевна Кузьменко","short":"Даша","memory":false,"g":"f","note":""},{"id":"iva","dm":"07.09","y":1972,"full":"Александр Петрович Иванов","short":"Саша","memory":false,"g":"m","note":""},{"id":"ole","dm":"06.05","y":1997,"full":"Олеся Александровна Архарова","short":"Олеся","memory":false,"g":"f","note":""},{"id":"alx","dm":"15.07","y":1996,"full":"Алексей Сергеевич Архаров","short":"Лёша","memory":false,"g":"m","note":""},{"id":"zhen","dm":"14.03","y":2006,"full":"Евгения Александровна Иванова","short":"Женя","memory":false,"g":"f","note":""},{"id":"mis","dm":"12.03","y":2014,"full":"Михаил Александрович Иванов","short":"Миша","memory":false,"g":"m","note":""},{"id":"kos","dm":"23.01","y":2006,"full":"Константин Юрьевич Кузьменко","short":"Костя","memory":false,"g":"m","note":""}];
