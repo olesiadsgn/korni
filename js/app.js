@@ -203,6 +203,7 @@ function personHTML(id){const p=P[id];
    ${p.stories?`<h2>Воспоминания</h2>${p.stories.map(st=>`<div class="story">${esc(st[0])}<small>${esc(st[1])}</small></div>`).join('')}`:''}
    <h2>Что ещё узнать</h2><div class="ask"><b>${p.stories?'Расскажите ещё':'Историй пока нет'}</b>${p.ask?`<ul>${p.ask.map((a,i)=>`<li><span>${esc(a)}</span><a class="tell" href="${BOT}?start=a_${id}_${i}" target="_blank" rel="noopener">Рассказать</a></li>`).join('')}</ul>`:'<br>'}<a class="btn" href="${BOT}?start=s_${id}" target="_blank" rel="noopener">Рассказать о ${esc(W(id,'нём','ней'))} в боте</a> <a data-go="add">или написать здесь →</a></div>
    ${kin.length?`<h2>Родные</h2><div class="chips">${kin.map(k=>`<button class="chip" data-p="${k}">${av(k,26)}${esc(short(k))}${relv(k)?` <em>${esc(relv(k))}</em>`:''}</button>`).join('')}</div>`:''}
+   ${p.arch?`<h2>Архивные документы</h2><div class="arch">${p.arch.map(x=>`<a href="${x[2]}" target="_blank" rel="noopener"><b>${esc(x[0])}</b><small>${esc(x[1])}</small><em>Скан на FamilySearch ↗</em></a>`).join('')}</div>`:''}
    ${p.src?`<h2>Источники</h2><div class="src">${p.src.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${esc(x[0])} ↗</a>`).join('')}</div>`:''}
    <div class="swipeh">← листай людей главы стрелками сверху →</div></div>`}
 function openP(id,dir){
