@@ -28,7 +28,8 @@ function blood(v,t){
   const A=ups(v),B=ups(t);let best=null;
   for(const k in A)if(k in B){const s=A[k]+B[k];if(!best||s<best[0])best=[s,A[k],B[k]]}
   if(!best)return null;const[,a,b]=best;
-  if(b===0){return a===1?W(t,'папа','мама'):a===2?W(t,'дедушка','бабушка'):a===3?W(t,'прадедушка','прабабушка'):W(t,'прапрадедушка','прапрабабушка')}
+  if(b===0){return a===1?W(t,'папа','мама'):'пра'.repeat(a-2)+W(t,'дедушка','бабушка')}
+  if(b===1&&a>=4)return W(t,'двоюродный ','двоюродная ')+'пра'.repeat(a-3)+W(t,'дедушка','бабушка');
   if(a===0){return b===1?W(t,'сын','дочь'):b===2?W(t,'внук','внучка'):W(t,'правнук','правнучка')}
   const T={'1,1':W(t,'брат','сестра'),'2,1':W(t,'дядя','тётя'),'1,2':W(t,'племянник','племянница'),'2,2':W(t,'двоюродный брат','двоюродная сестра'),
    '3,1':W(t,'двоюродный дедушка','двоюродная бабушка'),'3,2':W(t,'двоюродный дядя','двоюродная тётя'),'3,3':W(t,'троюродный брат','троюродная сестра'),
@@ -49,7 +50,7 @@ const relv=id=>VIEWER?rel(VIEWER,id):'';
 
 /* ===== structure ===== */
 const CH=[
- {id:'kuz',t:'Кузьменко из Боромли',hero:'photos/bor-house.jpg',pos:'center 60%',ppl:['aln','vas','dmi','vad','pav','ale'],pl:['bor','rov'],intro:'Ветка по фамилии Кузьменко ведёт в казачью Боромлю на Слобожанщине. Отсюда родом Дмитрий Алексеевич, военный врач в пограничных войсках. После войны он с семьёй осел в Саратове.',gal:['bor-house.jpg','bor-katya.jpg','bor-sasha.jpg','bor-tanya.jpg']},
+ {id:'kuz',t:'Кузьменко из Боромли',hero:'photos/bor-house.jpg',pos:'center 60%',ppl:['prf','nkf','vrm','aln','klv','mrk','dmk','mxm','vas','dmi','vad','pav','ale'],pl:['bor','rov'],intro:'Ветка по фамилии Кузьменко ведёт в казачью Боромлю на Слобожанщине. Отсюда родом Дмитрий Алексеевич, военный врач в пограничных войсках. После войны он с семьёй осел в Саратове.',gal:['bor-house.jpg','bor-katya.jpg','bor-sasha.jpg','bor-tanya.jpg']},
  {id:'vak',t:'Ваккер и Журавлевы',hero:'photos/kuz-unknown.jpg',pos:'center 15%',ppl:['ivv','zhe','olg'],pl:['vak'],intro:'Самая загадочная ветка. Иван Ваккер был немцем. Когда немцев выселяли, его отправили на север, и что с ним стало дальше, семья так и не узнала.'},
  {id:'pet',t:'Петровы с Саратовщины',hero:'photos/vla-mar.jpg',pos:'center 25%',ppl:['ivp','ama','vla','ana','mar','zoy','vvp','svp','kvp'],pl:['sva','bra','nte'],intro:'Сёла на западе Саратовской области, старый Балашовский уезд. Отсюда Зоя Владимировна и её родители: Владимир Иванович, прошедший войну, и Мария Васильевна, в войну работавшая на тракторах.'},
  {id:'iva',t:'Ивановы из Никитовки',hero:'photos/ant-family.jpg',pos:'center 30%',ppl:['olgi','pet','ant','iva','tat','kol','sve','ivn'],pl:['nik'],gal:['old1.jpg','old3.jpg','old4.jpg','old7.jpg','olgi-oven.jpg','olgi-room.jpg','kol-porch.jpg','nik-family2.jpg'],intro:'Деревня Никитовка в Воронежской области, у самой границы с Саратовской. Отсюда родом Александр Петрович Иванов и его сестра Таня.'},
@@ -136,7 +137,7 @@ const PRINT=/^(old\d|kuz-unknown|guitar|vla-|ale-army|ale-portrait|iva-little|yu
 const gal=(list,big)=>`<div class="gal${big?' big':''}">${list.map(([f,c],i)=>`<button class="print${PRINT.test(f)?' old':''}" style="--rt:${(i%2?1:-1)*(0.6+(i%3)*0.5)}deg" data-lb="photos/${f}" data-cap="${esc(cap(c))}"><img src="photos/${f}" alt="${esc(cap(c))}" loading="lazy"><span>${esc(cap(c))}</span></button>`).join('')}</div>`;
 const ARCHM=Object.fromEntries(ARCH);
 const LEG=`<div class="legend"><span><span class="dot b-kuz"></span> Кузьменко</span><span><span class="dot b-vak"></span> Ваккер</span><span><span class="dot b-pet"></span> Петровы</span><span><span class="dot b-iva"></span> Ивановы</span><span><span class="dot b-me"></span> наше поколение</span></div>`;
-const GENS=[['I','до 1920-х',['aln','ivv','zhe','ivp','ama']],['II','1920-е',['dmi','olg','vas','vla','ana','mar','olgi']],['III','1940–50-е',['ale','zoy','vad','vvp','svp','pav','pet','ant']],['IV','1970–80-е',['yul','iva','dar','kvp','tat','kol']],['V','1990–2010-е',['ole','alx','zhen','mis','kos','sve','ivn']]];
+const GENS=[['I','XIX век',['prf']],['II','XIX век',['nkf','vrm']],['III','1890–1900-е',['aln','klv','mrk','dmk','ivv','zhe','ivp','ama']],['IV','1910–20-е',['mxm','dmi','olg','vas','vla','ana','mar','olgi']],['V','1940–50-е',['ale','zoy','vad','vvp','svp','pav','pet','ant']],['VI','1970–80-е',['yul','iva','dar','kvp','tat','kol']],['VII','1990–2010-е',['ole','alx','zhen','mis','kos','sve','ivn']]];
 const R={
  intro:()=>`<div class="kick">Предисловие</div><h1>Корни <em>нашей семьи</em></h1>
   <p class="lead">Здесь собрано всё, что удалось узнать о нашей семье: лица, судьбы, сёла, откуда мы родом, и истории, которые рассказывают родные.</p>
@@ -222,7 +223,7 @@ $('ovPrev').onclick=()=>OVI>0&&openP(OVL[OVI-1],-1);$('ovNext').onclick=()=>OVI<
 /* ===== map ===== */
 const PTS=[
  {k:'rov',n:'Ровно',lat:50.62,lon:26.25,w:'Здесь в 1948 году родился Вадим, сын Дмитрия Алексеевича',who:['vad']},
- {k:'bor',n:'Боромля',lat:50.63,lon:34.97,w:'Казачье село, родина Кузьменко',who:['aln','vas','dmi','pav']},
+ {k:'bor',n:'Боромля',lat:50.63,lon:34.97,w:'Казачье село, родина Кузьменко',who:['nkf','aln','dmk','mxm','vas','dmi','pav']},
  {k:'nik',n:'Никитовка',lat:51.68,lon:41.63,w:'Родина Александра Петровича и Татьяны. Здесь жила Ольга Ильинична и живёт Антонина. Рядом течёт речка Мокрый Карачан',who:['ant','olgi','iva','tat']},
  {k:'bra',n:'Братское',lat:51.55,lon:43.17,w:'Родина Марии Васильевны (место примерное)',who:['mar']},
  {k:'sva',n:'Святославка',lat:51.33,lon:43.43,w:'Родина Зои Владимировны',who:['zoy']},
@@ -430,7 +431,7 @@ $('toCover').onclick=()=>{$('cover').classList.remove('hide');requestAnimationFr
 /* ===== wall ===== */
 const C=i=>150+i*170, Rr=r=>70+r*250, FH=96, xy=id=>[C(POS[id][0]),Rr(POS[id][1])];
 const world=$('world'),lines=$('lines'),wall=$('wall'),cv=$('canvas');
-const SW=C(8)+130,SH=Rr(4)+220;
+const SW=C(9)+130,SH=Rr(6)+220;
 function buildWall(){
   let L='';GENS.forEach((g,r)=>{L+=`<text x="10" y="${Rr(r)+50}" class="gl">${g[0]}</text><text x="10" y="${Rr(r)+72}" class="gls">${g[1]}</text>`});
   COUPLES.forEach(([a,b])=>{const[ax,ay]=xy(a),[bx]=xy(b);L+=`<line class="sp" x1="${ax+56}" y1="${ay+FH/2}" x2="${bx-56}" y2="${ay+FH/2}"/>`});
